@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Message } from '../Message/Message';
 import { selectMessages } from '../../selectors/messengerSelectors';
 import { useAppSelector } from '../../../app/model/store.model';
@@ -12,7 +12,7 @@ export const Messenger = () => {
     return (
         <div className='m-2 overflow-y-auto flex-1 flex flex-col'>
             <div className='flex-1 p-2'>
-                {messages.map(message => (
+                {messages.map((message) => (
                     <Message
                         key={message.id}
                         isMine={false}

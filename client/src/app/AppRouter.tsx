@@ -1,23 +1,14 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { chatConfig } from '../chat/config';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Chat } from '../chat/';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: (
-            <div className='border m-3 bg-slate-300 rounded-md text-center p-4 font-bold border-solid'>
-                test
-            </div>
-        ),
+        element: <Navigate to={'/chat'} />,
     },
     {
-        path: chatConfig.route,
+        path: '/chat',
         element: <Chat />,
-    },
-    {
-        path: '/test',
-        element: <div>test</div>,
     },
     {
         path: '*',
