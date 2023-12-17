@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { Messenger } from './Messenger/Messenger';
 import { ChatSelector } from './ChatSelector/ChatSelector';
-import { ioClient } from '../socket/socket';
+import { useIncomingMessages } from '../hooks/useIncomingMessages';
+import { useParams } from 'react-router-dom';
 
 export const Chat = () => {
-    useEffect(() => {
-        ioClient.on('message', (data: any) => {
-            console.log('Message', data);
-        });
-    }, []);
+    const params = useParams();
+    console.log(params);
+    useIncomingMessages();
 
     return (
         <div className='flex h-full'>

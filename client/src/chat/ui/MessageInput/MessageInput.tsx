@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
 import { ioClient } from '../../socket/socket';
+import { MessageScheme } from '../../model/message.model';
+import { useAppDispatch } from '../../../app/model/store.model';
+import { messengerActions } from '../../slices/messengerSlice';
 
 export const MessageInput = () => {
     const [msgText, setMsgText] = useState('');
+    const dispatch = useAppDispatch();
 
     const handleSendClick = () => {
-        ioClient.emit('message', msgText, (res: any) => {
-            console.log(res);
-        });
+        ioClient.emit(
+            'message',
+            {
+                text: msgText,
+            },
+            (newMessage: MessageScheme) => {
+                dispatch(messengerActions.addMessage(newMessage));
+            }
+        );
     };
 
     return (
         <div className='flex flex-col w-full '>
             <textarea
                 value={msgText}
-                onChange={(e) => setMsgText(e.target.value)}
+                onChange={e => setMsgText(e.target.value)}
                 className=' w-full flex-1 rounded-md p-4 border border-black'
                 placeholder='Enter new message'
             ></textarea>

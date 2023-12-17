@@ -43,6 +43,9 @@ export const messengerSlice = createSlice({
         setMessages(state: MessengerSliceScheme, action: PayloadAction<Array<MessageScheme>>) {
             state.messages = action.payload;
         },
+        addMessage(state: MessengerSliceScheme, action: PayloadAction<MessageScheme>) {
+            state.messages.push(action.payload);
+        },
     },
 });
 
