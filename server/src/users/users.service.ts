@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { FindUserDto } from './dto/find-user-dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
-type FindAllResponse = Array<{
+export type FindAllResponse = Array<{
     username: string;
 }>;
 
@@ -14,19 +14,23 @@ export class UsersService {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
     async findAll(): Promise<FindAllResponse> {
-        return this.userModel.find(
-            {},
-            {
-                username: true,
-            },
-        );
+        return this.userModel
+            .find(
+                {},
+                {
+                    username: true,
+                },
+            )
+            .exec();
     }
 
     async findOne(findUserDto: FindUserDto): Promise<User> {
-        return this.userModel.findOne<UserDocument>({
-            username: findUserDto.username,
-            email: findUserDto.email,
-        })[0];
+        const user = await this.userModel
+            .findOne<UserDocument>({
+                username: findUserDto.username,
+            })
+            .exec();
+        return user;
     }
 
     async createOne(createUserDto: CreateUserDto): Promise<User> {

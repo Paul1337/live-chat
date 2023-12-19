@@ -1,5 +1,16 @@
+export interface UserInfo {
+    username: string;
+    firstName: string;
+    lastName: string;
+}
+
+export interface ChatDto {
+    users: Array<UserInfo>;
+    _id: string;
+}
+
 export interface ChatScheme {
-    chatId: number;
+    chatId: string;
     name: string;
 }
 

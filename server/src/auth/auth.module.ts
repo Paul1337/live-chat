@@ -25,5 +25,6 @@ import { JwtModule } from '@nestjs/jwt';
             useClass: AuthGuard,
         },
     ],
+    exports: [AuthService],
 })
 export class AuthModule {}

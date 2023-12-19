@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
-import { ioClient } from '../../socket/socket';
-import { MessageScheme } from '../../model/message.model';
-import { useAppDispatch } from '../../../app/model/store.model';
-import { messengerActions } from '../../slices/messengerSlice';
+import { useState } from 'react';
+import { RootState, useAppDispatch } from '../../../app/model/store.model';
+import { thunkSendMessage } from '../../services/sendMessage';
+import { useChatId } from '../../hooks/useChatId';
+import { useSelector } from 'react-redux';
 
 export const MessageInput = () => {
     const [msgText, setMsgText] = useState('');
     const dispatch = useAppDispatch();
+    const chatId = useChatId();
+    const userData = useSelector((state: RootState) => state.user.userData);
 
     const handleSendClick = () => {
-        ioClient.emit(
-            'message',
-            {
+        if (!chatId || !userData) return;
+        dispatch(
+            thunkSendMessage({
                 text: msgText,
-            },
-            (newMessage: MessageScheme) => {
-                dispatch(messengerActions.addMessage(newMessage));
-            }
+                img: '',
+                chatId,
+                owner: userData.id,
+            })
         );
     };
 

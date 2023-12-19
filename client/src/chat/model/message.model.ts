@@ -1,14 +1,23 @@
-export interface MessageDto {
-    text: string;
-    _id: string;
-}
+// export interface MessageDto {
+//     img?: string;
+//     text?: string;
+//     owner: string;
+//     to: string;
+//     _id: string;
+//     createdAt: string;
+//     chatId: string;
+// }
 
 export interface MessageScheme {
-    id: string;
-    // date: string;
-    text: string;
-    // from: number;
-    // isMine: boolean;
+    _id?: string;
+
+    text?: string;
+    img?: string;
+
+    chatId: string;
+    owner: string;
+
+    createdAt?: string;
 }
 
 export type MessageListType = Array<MessageScheme>;

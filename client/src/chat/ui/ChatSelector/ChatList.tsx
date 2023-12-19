@@ -1,19 +1,19 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectChatItems, selectCurrentChat, selectSearchText } from '../../selectors/chatSelectors';
-import { ChatItem } from './ChatItem';
-import { ChatScheme } from '../../model/chat.model';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../app/model/store.model';
-import { chatActions } from '../../slices/chatSlice';
+import { useChatId } from '../../hooks/useChatId';
+import { ChatScheme } from '../../model/chat.model';
+import { selectChatItems, selectSearchText } from '../../selectors/chatSelectors';
+import { ChatItem } from './ChatItem';
 
 export const ChatList = () => {
-    const dispatch = useAppDispatch();
     const chatItems = useSelector(selectChatItems);
     const searchText = useSelector(selectSearchText);
-    const currentChat = useSelector(selectCurrentChat);
+    const chatId = useChatId();
+    const navigate = useNavigate();
 
-    const handleChatItemClick = (chatItem: ChatScheme) => {
-        dispatch(chatActions.setCurrentChat(chatItem));
+    const handleChatItemClick = (item: ChatScheme) => {
+        navigate(`/chat/${item.chatId}`);
     };
 
     return (
@@ -22,7 +22,7 @@ export const ChatList = () => {
                 .filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()))
                 .map(item => (
                     <ChatItem
-                        isSelected={item === currentChat}
+                        isSelected={item.chatId === chatId}
                         onClick={() => handleChatItemClick(item)}
                         key={item.chatId}
                         chatName={item.name}

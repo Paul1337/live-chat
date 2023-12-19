@@ -11,23 +11,27 @@ import { AuthService } from './auth.service';
 import { LogInUserDto } from './dto/log-in-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
+import { Public } from './decorators/public.decorator';
+import { RequestExtended } from './model/request.model';
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('/log_in')
+    @Public()
     async logIn(@Body() logInDto: LogInUserDto) {
         return this.authService.logIn(logInDto);
     }
 
     @Post('/reg')
+    @Public()
     async register(@Body() createUserDto: CreateUserDto) {
         return this.authService.register(createUserDto);
     }
 
-    @Get('/me')
-    async init(@Req() req: Request) {
+    @Post('/me')
+    async init(@Req() req: RequestExtended) {
         if (req['user']) {
             return req['user'];
         }

@@ -1,11 +1,10 @@
-import { ForbiddenException, HttpException, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LogInUserDto } from './dto/log-in-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
 import bcrypt from 'bcrypt';
-import { User } from 'src/users/schemas/user.schema';
-import { Model } from 'mongoose';
+import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LogInUserDto } from './dto/log-in-user.dto';
+import { UserPayloadScheme } from './model/request.model';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +15,7 @@ export class AuthService {
 
     async logIn(loginUserDto: LogInUserDto) {
         const user = await this.usersService.findOne({
-            email: loginUserDto.email,
+            // email: loginUserDto.email,
             username: loginUserDto.username,
         });
         if (!user) throw new ForbiddenException();
@@ -26,7 +25,13 @@ export class AuthService {
             throw new ForbiddenException();
         }
 
-        const payload = user;
+        console.log('pass ok');
+
+        const payload: UserPayloadScheme = {
+            email: user.email,
+            username: user.username,
+            id: user._id.toString(),
+        };
         return {
             authToken: await this.jwtService.signAsync(payload),
             userData: payload,
@@ -34,15 +39,30 @@ export class AuthService {
     }
 
     async register(createUserDto: CreateUserDto) {
-        const userWithSameEmail = await this.usersService.findOne({
-            email: createUserDto.email,
+        const userWithSameUsername = await this.usersService.findOne({
+            username: createUserDto.username,
         });
-        if (userWithSameEmail)
-            throw new HttpException(`User with email ${createUserDto.email} already exists`, 500);
+        if (userWithSameUsername)
+            throw new HttpException(`User with username ${createUserDto.username} already exists`, 500);
         createUserDto.password = bcrypt.hashSync(createUserDto.password, 5);
         await this.usersService.createOne(createUserDto);
         return {
             message: 'ok',
         };
+    }
+
+    extractAuthTokenFromHeader(authHeader: string): string | undefined {
+        const [type, token] = authHeader?.split(' ') ?? [];
+        return type === 'Bearer' ? token : undefined;
+    }
+
+    async verifyToken(token: string): Promise<UserPayloadScheme> {
+        try {
+            const payload = await this.jwtService.verifyAsync(token);
+            return payload;
+        } catch (err) {
+            console.log(err);
+            throw new UnauthorizedException();
+        }
     }
 }

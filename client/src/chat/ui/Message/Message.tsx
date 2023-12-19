@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 interface MessageProps {
     text: string;
-    date: Date;
+    date?: Date;
     from?: {
         name: string;
         photo: string;
@@ -17,7 +17,7 @@ export const Message: FC<MessageProps> = props => {
             <div className=' flex justify-between border-b-blue-500 border-b p-2 items-center'>
                 <div className='flex items-center justify-between'>
                     <div className=' text-red-500'>{isMine ? 'Me' : 'Him'}</div>
-                    <div className='ml-2 border p-2'>{date.toLocaleString()}</div>
+                    {date && <div className='ml-2 border p-2'>{date.toLocaleString()}</div>}
                 </div>
                 <div className=''>
                     <button className=' hover:bg-slate-300 p-2 rounded-md'>Edit</button>

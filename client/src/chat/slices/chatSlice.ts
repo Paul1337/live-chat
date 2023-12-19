@@ -3,26 +3,11 @@ import { ChatListType, ChatScheme } from '../model/chat.model';
 
 interface ChatSliceScheme {
     chatList: ChatListType;
-    currentChat: ChatScheme | null;
     searchText: string;
 }
 
 const initialState: ChatSliceScheme = {
-    chatList: [
-        {
-            chatId: 0,
-            name: 'br',
-        },
-        {
-            chatId: 1,
-            name: 'friend',
-        },
-        {
-            chatId: 2,
-            name: 'someone',
-        },
-    ],
-    currentChat: null,
+    chatList: [],
     searchText: '',
 };
 
@@ -33,8 +18,8 @@ export const chatSlice = createSlice({
         setSearchText(state: ChatSliceScheme, action: PayloadAction<string>) {
             state.searchText = action.payload;
         },
-        setCurrentChat(state: ChatSliceScheme, action: PayloadAction<ChatScheme>) {
-            state.currentChat = action.payload;
+        setChats(state: ChatSliceScheme, action: PayloadAction<ChatListType>) {
+            state.chatList = action.payload;
         },
     },
 });
