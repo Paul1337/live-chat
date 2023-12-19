@@ -27,7 +27,7 @@ export const MessageInput = () => {
         <div className='flex flex-col w-full '>
             <textarea
                 value={msgText}
-                onChange={e => setMsgText(e.target.value)}
+                onChange={(e) => setMsgText(e.target.value)}
                 className=' w-full flex-1 rounded-md p-4 border border-black'
                 placeholder='Enter new message'
             ></textarea>

@@ -22,13 +22,6 @@ export class Message {
     })
     owner: ObjectId;
 
-    // @Prop({
-    //     required: true,
-    //     type: Types.ObjectId,
-    //     ref: 'User',
-    // })
-    // to: ObjectId;
-
     @Prop({
         required: true,
     })

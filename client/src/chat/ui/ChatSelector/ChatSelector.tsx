@@ -1,4 +1,4 @@
-import { SearchBlock } from './SearchBlock';
+import { TopPanel } from './TopPanel';
 import { ChatList } from './ChatList';
 import { FC, useEffect } from 'react';
 import { thunkLoadChats } from '../../services/loadMyChats';
@@ -13,7 +13,7 @@ export const ChatSelector = () => {
 
     return (
         <div className='flex flex-col p-4 m-2 border border-blue-500'>
-            <SearchBlock />
+            <TopPanel />
             <ChatList />
         </div>
     );

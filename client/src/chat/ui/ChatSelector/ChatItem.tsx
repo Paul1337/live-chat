@@ -10,7 +10,7 @@ interface ChatItemProps {
 
 const DefaultPhoto = 'default_profile.png';
 
-export const ChatItem: FC<ChatItemProps> = props => {
+export const ChatItem: FC<ChatItemProps> = (props) => {
     const { chatName, onClick, isSelected, photo = DefaultPhoto } = props;
     const photoStyle: CSSProperties = {
         backgroundImage: `url(./src/assets/${photo})`,
@@ -19,7 +19,7 @@ export const ChatItem: FC<ChatItemProps> = props => {
         <div
             onClick={onClick}
             className={classNames(
-                'flex justify-between items-center border-blue-500 border-2 rounded-md p-2 m-2 hover:bg-slate-400 cursor-pointer mt-4',
+                'flex justify-around items-center border-blue-500 border-2 rounded-md p-2 m-2 hover:bg-slate-400 cursor-pointer mt-4',
                 {
                     'border-red-500': isSelected,
                 }
