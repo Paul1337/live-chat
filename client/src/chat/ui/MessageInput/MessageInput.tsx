@@ -11,7 +11,7 @@ export const MessageInput = () => {
     const userData = useSelector((state: RootState) => state.user.userData);
 
     const handleSendClick = () => {
-        if (!chatId || !userData) return;
+        if (!chatId || !userData || !msgText) return;
         dispatch(
             thunkSendMessage({
                 text: msgText,
@@ -20,6 +20,7 @@ export const MessageInput = () => {
                 owner: userData.id,
             })
         );
+        setMsgText('');
     };
 
     return (

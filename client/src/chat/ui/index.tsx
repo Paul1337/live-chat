@@ -12,7 +12,7 @@ export const Chat: FC<ChatProps> = props => {
     const chatId = useChatId();
     const dispatch = useAppDispatch();
 
-    useIncomingMessages();
+    useIncomingMessages(chatId);
 
     useEffect(() => {
         if (chatId) {
@@ -23,7 +23,7 @@ export const Chat: FC<ChatProps> = props => {
     return (
         <div className='flex h-full'>
             <ChatSelector />
-            <Messenger />
+            {chatId && <Messenger />}
         </div>
     );
 };

@@ -33,7 +33,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     async handleConnection(@ConnectedSocket() client: Socket) {
-        // const authHeader = client.handshake.headers.authorization;
         const token = client.handshake.auth.token;
         const payload = await this.authService.verifyToken(token);
         this.clients.set(payload.id, client);
@@ -62,10 +61,14 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         await newMessage.save();
 
         console.log('saved message', newMessage);
-        const rightClient = this.clients.get(messageDto.to);
-        if (rightClient) {
-            console.log('right client online, so sending message');
-            rightClient.emit('message', newMessage);
+        const chat = await this.chatModel.findOne(new Types.ObjectId(messageDto.chatId));
+        for (const user of chat.users) {
+            if (user.toString() === userId) continue;
+            const rightClient = this.clients.get(user.toString());
+            if (rightClient) {
+                console.log(`right client ${user.toString()} is online, so sending message`);
+                rightClient.emit('message', newMessage);
+            }
         }
         return newMessage;
     }

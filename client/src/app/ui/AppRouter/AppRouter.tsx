@@ -1,7 +1,6 @@
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Chat } from '../../../chat';
 import { AuthPage } from '../../../auth/ui';
-import { HomePage } from '../HomePage/HomePage';
 import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
