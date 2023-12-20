@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Chat } from '../../../chat';
 import { AuthPage } from '../../../auth/ui';
 import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
@@ -9,22 +9,18 @@ const router = createBrowserRouter([
         element: <PrivateRoute />,
         children: [
             {
-                path: '/chat',
+                path: '/chat/:chatId?',
                 element: <Chat />,
             },
             {
-                path: '/chat/:chatId',
-                element: <Chat />,
+                path: '/*?',
+                element: <Navigate to={'/chat'} />,
             },
         ],
     },
     {
         path: '/auth',
         element: <AuthPage />,
-    },
-    {
-        path: '*',
-        element: <div>Error. Page does not exist</div>,
     },
 ]);
 

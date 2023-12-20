@@ -6,6 +6,7 @@ export interface UserInfo {
 
 export interface ChatDto {
     users: Array<UserInfo>;
+    groupName?: string;
     _id: string;
 }
 

@@ -4,10 +4,12 @@ import { ChatListType, ChatScheme } from '../model/chat.model';
 interface ChatSliceScheme {
     chatList: ChatListType;
     searchText: string;
+    isLoadingChats: boolean;
 }
 
 const initialState: ChatSliceScheme = {
     chatList: [],
+    isLoadingChats: false,
     searchText: '',
 };
 
@@ -20,6 +22,9 @@ export const chatSlice = createSlice({
         },
         setChats(state: ChatSliceScheme, action: PayloadAction<ChatListType>) {
             state.chatList = action.payload;
+        },
+        setIsLoadingChats(state: ChatSliceScheme, action: PayloadAction<boolean>) {
+            state.isLoadingChats = action.payload;
         },
     },
 });

@@ -12,7 +12,7 @@ export const Chat: FC<ChatProps> = props => {
     const chatId = useChatId();
     const dispatch = useAppDispatch();
 
-    useIncomingMessages(chatId);
+    useIncomingMessages();
 
     useEffect(() => {
         if (chatId) {

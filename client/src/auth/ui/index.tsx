@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { LoginForm } from './LoginForm/LoginForm';
@@ -14,7 +14,9 @@ export const AuthPage = () => {
     const isAuthed = useAuth();
     const [authType, setAuthType] = useState(AuthType.Login);
 
-    if (isAuthed) navigate('/chat');
+    useEffect(() => {
+        if (isAuthed) navigate('/chat');
+    }, [isAuthed]);
 
     const handleToggleAuthType = () => {
         setAuthType(type => (type === AuthType.Login ? AuthType.Reg : AuthType.Login));

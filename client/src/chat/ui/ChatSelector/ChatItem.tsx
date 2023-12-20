@@ -8,12 +8,12 @@ interface ChatItemProps {
     onClick: () => void;
 }
 
-const DefaultPhoto = 'default_profile.png';
+import defaultProfile from '../../assets/default_profile.png';
 
-export const ChatItem: FC<ChatItemProps> = (props) => {
-    const { chatName, onClick, isSelected, photo = DefaultPhoto } = props;
+export const ChatItem: FC<ChatItemProps> = props => {
+    const { chatName, onClick, isSelected, photo = defaultProfile } = props;
     const photoStyle: CSSProperties = {
-        backgroundImage: `url(./src/assets/${photo})`,
+        backgroundImage: `url(${photo})`,
     };
     return (
         <div

@@ -3,7 +3,7 @@ import { AppThunk } from '../../app/model/store.model';
 import { setAuthToken } from '../data/token';
 import { UserDataScheme, userActions } from '../slices/userSlice';
 
-export const thunkAuth = (): AppThunk => {
+export const thunkAuth = (): AppThunk<Promise<any>> => {
     return async dispatch => {
         try {
             const { data } = await axiosInstance.post<UserDataScheme>('/auth/me');
@@ -12,5 +12,6 @@ export const thunkAuth = (): AppThunk => {
         } catch (err) {
             dispatch(userActions.setAuthed(false));
         }
+        return Promise.resolve();
     };
 };

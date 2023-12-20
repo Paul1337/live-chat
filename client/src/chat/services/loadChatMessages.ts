@@ -8,17 +8,8 @@ export const thunkLoadChatMessages = (chatId: string): AppThunk => {
         console.log('load messages', chatId);
         dispatch(messengerActions.setIsLoadingMessages(true));
         const { data } = await axiosInstance.get<Array<MessageScheme>>(`/messenger/chats/${chatId}`);
-        console.log('res', data);
-        dispatch(
-            messengerActions.setMessages(
-                data
-                // data.map(msgResp => ({
-                //     id: msgResp._id,
-                //     text: msgResp.text,
-                //     date: msgResp.createdAt,
-                // }))
-            )
-        );
+        console.log('Loaded chat messages:', data);
+        dispatch(messengerActions.setMessages(data));
         dispatch(messengerActions.setIsLoadingMessages(false));
     };
 };
