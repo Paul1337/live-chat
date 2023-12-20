@@ -19,7 +19,7 @@ export const ChatItem: FC<ChatItemProps> = props => {
         <div
             onClick={onClick}
             className={classNames(
-                'flex justify-around items-center border-blue-500 border-2 rounded-md p-2 m-2 hover:bg-slate-400 cursor-pointer mt-4',
+                'flex justify-between items-center border-blue-500 border-2 rounded-md p-2 m-2 hover:bg-slate-400 cursor-pointer mt-4',
                 {
                     'border-red-500': isSelected,
                 }

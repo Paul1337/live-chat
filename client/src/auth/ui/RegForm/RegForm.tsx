@@ -11,6 +11,8 @@ interface RegFormProps {
 export const RegForm: FC<RegFormProps> = props => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useAppDispatch();
@@ -40,7 +42,7 @@ export const RegForm: FC<RegFormProps> = props => {
                         <form className='space-y-4 md:space-y-6' action='#' onSubmit={handleSubmit}>
                             <div>
                                 <label
-                                    htmlFor='email'
+                                    htmlFor='username'
                                     className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
                                 >
                                     Your username
@@ -48,9 +50,8 @@ export const RegForm: FC<RegFormProps> = props => {
                                 <input
                                     type='text'
                                     name='username'
-                                    id='username'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                    placeholder='name@company.com'
+                                    placeholder='username'
                                     value={username}
                                     onChange={e => setUsername(e.target.value)}
                                 />
@@ -65,11 +66,43 @@ export const RegForm: FC<RegFormProps> = props => {
                                 <input
                                     type='email'
                                     name='email'
-                                    id='email'
                                     className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                                     placeholder='name@company.com'
                                     value={email}
                                     onChange={e => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor='firstName'
+                                    className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                                >
+                                    Your first name
+                                </label>
+                                <input
+                                    type='text'
+                                    name='firstName'
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    placeholder='name@company.com'
+                                    value={firstName}
+                                    onChange={e => setFirstName(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor='email'
+                                    className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+                                >
+                                    Your last name
+                                </label>
+                                <input
+                                    type='text'
+                                    name='email'
+                                    id='email'
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    placeholder='name@company.com'
+                                    value={lastName}
+                                    onChange={e => setLastName(e.target.value)}
                                 />
                             </div>
                             <div>
