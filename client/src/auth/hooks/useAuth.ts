@@ -1,7 +1,6 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/model/store.model';
+import { useAppSelector } from '../../app/model/store.model';
 
 export const useAuth = () => {
-    const isAuthed = useSelector((state: RootState) => state.user.isAuthed);
+    const isAuthed = useAppSelector(state => state.user.isAuthed);
     return isAuthed;
 };

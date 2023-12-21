@@ -1,12 +1,10 @@
-import React, { ChangeEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectSearchText } from '../../selectors/chatSelectors';
-import { useAppDispatch } from '../../../app/model/store.model';
+import { ChangeEvent, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../app/model/store.model';
 import { chatActions } from '../../slices/chatSlice';
 import { AddChatModal } from './AddChatModal';
 
 export const TopPanel = () => {
-    const searchText = useSelector(selectSearchText);
+    const searchText = useAppSelector(state => state.chat.chat.searchText);
     const dispatch = useAppDispatch();
     const [showAddChat, setShowAddChat] = useState(false);
 
@@ -15,7 +13,7 @@ export const TopPanel = () => {
     };
 
     const handleAddChatClick = () => {
-        setShowAddChat((show) => !show);
+        setShowAddChat(show => !show);
     };
 
     return (

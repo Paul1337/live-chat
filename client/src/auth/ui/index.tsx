@@ -1,34 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { LoginForm } from './LoginForm/LoginForm';
 import { RegForm } from './RegForm/RegForm';
 
 enum AuthType {
-    Login = 'Log in',
-    Reg = 'Register',
+    Login = 'login',
+    Reg = 'reg',
 }
+
+const DefaultAuthType = AuthType.Login;
 
 export const AuthPage = () => {
     const navigate = useNavigate();
     const isAuthed = useAuth();
-    const [authType, setAuthType] = useState(AuthType.Login);
+    const { authType = DefaultAuthType } = useParams();
 
     useEffect(() => {
         if (isAuthed) navigate('/chat');
     }, [isAuthed]);
 
-    const handleToggleAuthType = () => {
-        setAuthType(type => (type === AuthType.Login ? AuthType.Reg : AuthType.Login));
-    };
-
-    return (
-        <div>
-            {authType === AuthType.Login ? (
-                <LoginForm onRegClick={handleToggleAuthType} />
-            ) : (
-                <RegForm onLoginClick={handleToggleAuthType} />
-            )}
-        </div>
-    );
+    // return <div>{authType === AuthType.Login ? <LoginForm /> : <RegForm />}</div>;
 };

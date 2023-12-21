@@ -2,6 +2,8 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { Chat } from '../../../chat';
 import { AuthPage } from '../../../auth/ui';
 import { PrivateRoute } from '../PrivateRoute/PrivateRoute';
+import { RegForm } from '../../../auth/ui/RegForm/RegForm';
+import { LoginForm } from '../../../auth/ui/LoginForm/LoginForm';
 
 const router = createBrowserRouter([
     {
@@ -9,18 +11,27 @@ const router = createBrowserRouter([
         element: <PrivateRoute />,
         children: [
             {
-                path: '/chat/:chatId?',
+                path: 'chat/:chatId?',
                 element: <Chat />,
             },
             {
-                path: '/*?',
+                path: '*?',
                 element: <Navigate to={'/chat'} />,
             },
         ],
     },
     {
         path: '/auth',
-        element: <AuthPage />,
+        children: [
+            {
+                path: 'reg',
+                element: <RegForm />,
+            },
+            {
+                path: 'login',
+                element: <LoginForm />,
+            },
+        ],
     },
 ]);
 

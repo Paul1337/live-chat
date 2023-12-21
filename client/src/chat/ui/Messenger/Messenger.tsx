@@ -1,12 +1,11 @@
 import { useSelector } from 'react-redux';
 import { RootState, useAppSelector } from '../../../app/model/store.model';
-import { selectMessages } from '../../selectors/messengerSelectors';
 import { Message } from '../Message/Message';
 import { MessageInput } from '../MessageInput/MessageInput';
 import { useEffect, useRef } from 'react';
 
 export const Messenger = () => {
-    const messages = useAppSelector(selectMessages);
+    const messages = useAppSelector(state => state.chat.messenger.messages);
     const userData = useSelector((state: RootState) => state.user.userData);
     const messagesContRef = useRef<HTMLDivElement>(null);
     const isLoadingMessages = useSelector((state: RootState) => state.chat.messenger.isLoadingMessages);
@@ -23,7 +22,7 @@ export const Messenger = () => {
                 {isLoadingMessages ? (
                     <div className='text-center'>Is loading...</div>
                 ) : (
-                    messages.map((message) => (
+                    messages.map(message => (
                         <Message
                             key={message._id}
                             isMine={message.owner === userData?.id}

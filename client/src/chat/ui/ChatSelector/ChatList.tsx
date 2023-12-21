@@ -1,20 +1,18 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RootState, useAppDispatch } from '../../../app/model/store.model';
+import { useAppDispatch, useAppSelector } from '../../../app/model/store.model';
 import { useChatId } from '../../hooks/useChatId';
 import { ChatScheme } from '../../model/chat.model';
-import { selectChatItems, selectSearchText } from '../../selectors/chatSelectors';
-import { ChatItem } from './ChatItem';
 import { thunkLoadChats } from '../../services/loadMyChats';
-import { useEffect } from 'react';
+import { ChatItem } from './ChatItem';
 
 export const ChatList = () => {
-    const chatItems = useSelector(selectChatItems);
-    const searchText = useSelector(selectSearchText);
     const chatId = useChatId();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const isLoadingChats = useSelector((state: RootState) => state.chat.chat.isLoadingChats);
+    const chatItems = useAppSelector(state => state.chat.chat.chatList);
+    const searchText = useAppSelector(state => state.chat.chat.searchText);
+    const isLoadingChats = useAppSelector(state => state.chat.chat.isLoadingChats);
 
     const handleChatItemClick = (item: ChatScheme) => {
         navigate(`/chat/${item.chatId}`);
