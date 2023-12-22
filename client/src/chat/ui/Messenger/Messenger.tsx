@@ -1,14 +1,13 @@
-import { useSelector } from 'react-redux';
-import { RootState, useAppSelector } from '../../../app/model/store.model';
+import { useEffect, useRef } from 'react';
+import { useAppSelector } from '../../../app/model/store.model';
 import { Message } from '../Message/Message';
 import { MessageInput } from '../MessageInput/MessageInput';
-import { useEffect, useRef } from 'react';
 
 export const Messenger = () => {
-    const messages = useAppSelector(state => state.chat.messenger.messages);
-    const userData = useSelector((state: RootState) => state.user.userData);
+    const messages = useAppSelector(state => state.messenger.messages);
+    const userData = useAppSelector(state => state.user.userData);
     const messagesContRef = useRef<HTMLDivElement>(null);
-    const isLoadingMessages = useSelector((state: RootState) => state.chat.messenger.isLoadingMessages);
+    const isLoadingMessages = useAppSelector(state => state.messenger.isLoadingMessages);
 
     useEffect(() => {
         if (messagesContRef.current) {

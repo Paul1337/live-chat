@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { RootState, useAppDispatch } from '../../../app/model/store.model';
-import { thunkSendMessage } from '../../services/sendMessage';
+import { useAppDispatch, useAppSelector } from '../../../app/model/store.model';
 import { useChatId } from '../../hooks/useChatId';
-import { useSelector } from 'react-redux';
+import { thunkSendMessage } from '../../services/sendMessage';
 
 export const MessageInput = () => {
     const [msgText, setMsgText] = useState('');
     const dispatch = useAppDispatch();
     const chatId = useChatId();
-    const userData = useSelector((state: RootState) => state.user.userData);
+    const userData = useAppSelector(state => state.user.userData);
 
     const handleSendClick = () => {
         if (!chatId || !userData || !msgText) return;
@@ -27,7 +26,7 @@ export const MessageInput = () => {
         <div className='flex flex-col w-full '>
             <textarea
                 value={msgText}
-                onChange={(e) => setMsgText(e.target.value)}
+                onChange={e => setMsgText(e.target.value)}
                 className=' w-full flex-1 rounded-md p-4 border border-black'
                 placeholder='Enter new message'
             ></textarea>

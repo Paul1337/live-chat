@@ -14,6 +14,7 @@ export const RegForm: FC<RegFormProps> = props => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -26,10 +27,16 @@ export const RegForm: FC<RegFormProps> = props => {
         e.preventDefault();
         if (password === confirmPassword) {
             const data = { username, email, password };
-            console.log('login, data', data);
-            dispatch(thunkRegister(data)).then(() => {
-                navigate('/auth/login');
-            });
+            dispatch(thunkRegister(data))
+                .then(() => {
+                    navigate('/auth/login');
+                })
+                .catch(e => {
+                    console.log(e.response.data.message);
+                    setError(e.response.data.message.join('; '));
+                });
+        } else {
+            setError('Passwords do not match');
         }
     };
 
@@ -82,6 +89,9 @@ export const RegForm: FC<RegFormProps> = props => {
                                     >
                                         Login here
                                     </a>
+                                </p>
+                                <p className='text-red-500 font-md m-2 text-center whitespace-pre-wrap'>
+                                    {error ? 'Error: ' + error : ''}
                                 </p>
                             </form>
                         </div>

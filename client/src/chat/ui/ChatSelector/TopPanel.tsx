@@ -4,7 +4,7 @@ import { chatActions } from '../../slices/chatSlice';
 import { AddChatModal } from './AddChatModal';
 
 export const TopPanel = () => {
-    const searchText = useAppSelector(state => state.chat.chat.searchText);
+    const searchText = useAppSelector(state => state.chat.searchText);
     const dispatch = useAppDispatch();
     const [showAddChat, setShowAddChat] = useState(false);
 

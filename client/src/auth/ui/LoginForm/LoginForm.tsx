@@ -11,6 +11,7 @@ export const LoginForm: FC<LoginFormProps> = props => {
     const dispatch = useAppDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const nagivate = useNavigate();
 
     const onRegClick = () => {
@@ -21,9 +22,14 @@ export const LoginForm: FC<LoginFormProps> = props => {
         e.preventDefault();
         const data = { username, password };
         console.log('login, data', data);
-        dispatch(thunkLogIn(data)).then(() => {
-            nagivate('/chat');
-        });
+        dispatch(thunkLogIn(data))
+            .then(() => {
+                nagivate('/chat');
+            })
+            .catch(e => {
+                console.log(e.response.data.message);
+                setError(e.response.data.message);
+            });
     };
 
     return (
@@ -54,6 +60,9 @@ export const LoginForm: FC<LoginFormProps> = props => {
                                     >
                                         Sign up
                                     </a>
+                                </p>
+                                <p className='text-red-500 font-md m-2 text-center'>
+                                    {error ? 'Error: ' + error : ''}
                                 </p>
                             </form>
                         </div>

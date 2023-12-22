@@ -8,29 +8,7 @@ interface MessengerSliceScheme {
 
 const initialState: MessengerSliceScheme = {
     isLoadingMessages: false,
-    messages: [
-        // {
-        //     date: new Date().toString(),
-        //     from: 0,
-        //     id: 0,
-        //     isMine: false,
-        //     text: 'some text1',
-        // },
-        // {
-        //     date: new Date().toString(),
-        //     from: 0,
-        //     id: 1,
-        //     isMine: false,
-        //     text: 'some more text',
-        // },
-        // {
-        //     date: new Date().toString(),
-        //     from: 0,
-        //     id: 2,
-        //     isMine: false,
-        //     text: 'when text',
-        // },
-    ],
+    messages: [],
 };
 
 export const messengerSlice = createSlice({

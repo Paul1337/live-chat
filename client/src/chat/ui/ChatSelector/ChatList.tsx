@@ -10,9 +10,9 @@ export const ChatList = () => {
     const chatId = useChatId();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const chatItems = useAppSelector(state => state.chat.chat.chatList);
-    const searchText = useAppSelector(state => state.chat.chat.searchText);
-    const isLoadingChats = useAppSelector(state => state.chat.chat.isLoadingChats);
+    const chatItems = useAppSelector(state => state.chat.chatList);
+    const searchText = useAppSelector(state => state.chat.searchText);
+    const isLoadingChats = useAppSelector(state => state.chat.isLoadingChats);
 
     const handleChatItemClick = (item: ChatScheme) => {
         navigate(`/chat/${item.chatId}`);
