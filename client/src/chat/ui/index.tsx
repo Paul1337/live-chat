@@ -5,6 +5,7 @@ import { useIncomingMessages } from '../hooks/useIncomingMessages';
 import { thunkLoadChatMessages } from '../services/loadChatMessages';
 import { useChatId } from '../hooks/useChatId';
 import { useAppDispatch } from '../../app/model/store.model';
+import { Sidebar } from './Sidebar/Sidebar';
 
 interface ChatProps {}
 
@@ -22,7 +23,7 @@ export const Chat: FC<ChatProps> = props => {
 
     return (
         <div className='flex h-full'>
-            <ChatSelector />
+            <Sidebar />
             {chatId && <Messenger />}
         </div>
     );

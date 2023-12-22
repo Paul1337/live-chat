@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Chat } from './schemas/chat.schema';
 import { Message } from './schemas/message.schema';
+import { CreatePrivateChatDto } from './dto/create-chat.dto';
+import { UsersService } from 'src/users/users.service';
 
 export interface PopulatedUser {
     username: string;
@@ -15,6 +17,7 @@ export class MessengerService {
     constructor(
         @InjectModel(Chat.name) private chatModel: Model<Chat>,
         @InjectModel(Message.name) private messageModel: Model<Message>,
+        private usersService: UsersService,
     ) {}
 
     async getUserChats(userId: string) {
@@ -38,5 +41,51 @@ export class MessengerService {
             })
             .exec();
         return messages;
+    }
+
+    async createPrivateChat(userId: string, chatDto: CreatePrivateChatDto) {
+        const { username } = chatDto;
+        const recepient = await this.usersService.findOne({
+            username: username,
+        });
+        if (!recepient) throw new InternalServerErrorException(`No user with username ${username}`);
+
+        const { _id: recipientId } = recepient;
+
+        console.log('user id', userId);
+        console.log('recipient id', recipientId);
+
+        const chat = await this.chatModel
+            .findOne({
+                $and: [
+                    {
+                        users: {
+                            $size: 2,
+                        },
+                    },
+                    {
+                        users: new Types.ObjectId(userId),
+                    },
+                    {
+                        users: recipientId,
+                    },
+                ],
+            })
+            .exec();
+        console.log('chat', chat);
+        const chatExists = Boolean(chat);
+
+        if (chatExists) throw new InternalServerErrorException('Chat already exists');
+
+        const newChat = await this.chatModel.create({
+            users: [new Types.ObjectId(userId), recipientId],
+        });
+        const newChatPopulated = await newChat.populate<{
+            users: Array<PopulatedUser>;
+        }>('users', ['username', 'firstName', 'lastName']);
+
+        console.log(newChat);
+
+        return newChatPopulated;
     }
 }

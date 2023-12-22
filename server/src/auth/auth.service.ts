@@ -15,7 +15,6 @@ export class AuthService {
 
     async logIn(loginUserDto: LogInUserDto) {
         const user = await this.usersService.findOne({
-            // email: loginUserDto.email,
             username: loginUserDto.username,
         });
         if (!user) throw new ForbiddenException();
@@ -30,6 +29,8 @@ export class AuthService {
         const payload: UserPayloadScheme = {
             email: user.email,
             username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
             id: user._id.toString(),
         };
         return {

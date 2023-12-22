@@ -4,6 +4,9 @@ import { PayloadAction } from '@reduxjs/toolkit';
 export interface UserDataScheme {
     email: string;
     username: string;
+    firstName: string;
+    lastName: string;
+    photo?: string;
     id: string;
 }
 
@@ -21,7 +24,7 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUserData(state: UserSliceScheme, action: PayloadAction<UserDataScheme>) {
+        setUserData(state: UserSliceScheme, action: PayloadAction<UserDataScheme | null>) {
             state.userData = action.payload;
         },
         setAuthed(state: UserSliceScheme, action: PayloadAction<boolean>) {

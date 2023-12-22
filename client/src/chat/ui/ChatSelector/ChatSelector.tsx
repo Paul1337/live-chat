@@ -3,7 +3,7 @@ import { TopPanel } from './TopPanel';
 
 export const ChatSelector = () => {
     return (
-        <div className='flex flex-col p-4 m-2 border border-blue-500'>
+        <div className='flex-1 border my-2'>
             <TopPanel />
             <ChatList />
         </div>

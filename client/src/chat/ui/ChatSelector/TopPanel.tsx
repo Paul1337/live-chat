@@ -2,6 +2,9 @@ import { ChangeEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/model/store.model';
 import { chatActions } from '../../slices/chatSlice';
 import { AddChatModal } from './AddChatModal';
+import { Button } from '../../../shared/ui/Button/Button';
+
+import searchImg from '../../assets/search-img.svg';
 
 export const TopPanel = () => {
     const searchText = useAppSelector(state => state.chat.searchText);
@@ -17,17 +20,21 @@ export const TopPanel = () => {
     };
 
     return (
-        <div className='flex justify-around items-center'>
-            <label className=''>search</label>
+        <div className='flex justify-around items-center m-2'>
+            <div
+                className={`w-6 h-6 bg-center bg-cover`}
+                style={{ backgroundImage: `url(${searchImg})` }}
+            ></div>
             <input
                 className='border p-2 rounded-md ml-2'
-                type='text'
+                type='search'
+                placeholder='Chat name..'
                 value={searchText}
                 onChange={handleChange}
             />
-            <button onClick={handleAddChatClick} className='w-9 h-9 m-2 border rounded-md'>
-                +
-            </button>
+            <Button onClick={handleAddChatClick} className='w-9 h-9 p-0 border relative'>
+                <span className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>+</span>
+            </Button>
 
             {showAddChat && <AddChatModal onClose={() => setShowAddChat(false)} />}
         </div>

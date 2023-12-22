@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { CSSProperties, FC } from 'react';
+import { ProfileImage } from '../../../shared/ui/ProfileImage/ProfileImage';
 
 interface ChatItemProps {
     chatName: string;
@@ -8,24 +9,20 @@ interface ChatItemProps {
     onClick: () => void;
 }
 
-import defaultProfile from '../../assets/default_profile.png';
-
 export const ChatItem: FC<ChatItemProps> = props => {
-    const { chatName, onClick, isSelected, photo = defaultProfile } = props;
-    const photoStyle: CSSProperties = {
-        backgroundImage: `url(${photo})`,
-    };
+    const { chatName, onClick, isSelected, photo } = props;
     return (
         <div
             onClick={onClick}
             className={classNames(
-                'flex justify-between items-center border-blue-500 border-2 rounded-md p-2 m-2 hover:bg-slate-400 cursor-pointer mt-4',
+                'flex justify-between items-center border-blue-500 border-2 rounded-md p-2 m-2  cursor-pointer mt-4',
                 {
-                    'border-red-500': isSelected,
+                    'bg-blue-300': isSelected,
+                    'hover:bg-slate-300': !isSelected,
                 }
             )}
         >
-            <div className='w-8 h-8 bg-cover bg-center' style={photoStyle}></div>
+            <ProfileImage src={photo} />
             <h1 className='text-xl'>{chatName}</h1>
         </div>
     );

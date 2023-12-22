@@ -23,6 +23,9 @@ export const chatSlice = createSlice({
         setChats(state: ChatSliceScheme, action: PayloadAction<ChatListType>) {
             state.chatList = action.payload;
         },
+        addChat(state: ChatSliceScheme, action: PayloadAction<ChatScheme>) {
+            state.chatList.push(action.payload);
+        },
         setIsLoadingChats(state: ChatSliceScheme, action: PayloadAction<boolean>) {
             state.isLoadingChats = action.payload;
         },

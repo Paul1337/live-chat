@@ -5,6 +5,7 @@ export type ChatDocument = HydratedDocument<Chat>;
 
 @Schema({
     collection: 'chats',
+    timestamps: true,
 })
 export class Chat {
     _id: Types.ObjectId;
@@ -17,6 +18,9 @@ export class Chat {
 
     @Prop()
     groupName?: string;
+
+    @Prop()
+    createdAt: Date;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);
