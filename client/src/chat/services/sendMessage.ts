@@ -1,12 +1,13 @@
 import { AppThunk } from '../../app/model/store.model';
-import { MessageScheme } from '../model/message.model';
+import { MessageResponse, SendMessageRequest } from '../model/message.model';
 import { messengerActions } from '../slices/messengerSlice';
 import { ioClient } from '../../app/api/socketInstance';
+import { mapMessageResponseToScheme } from './converters/message';
 
-export const thunkSendMessage = (data: MessageScheme): AppThunk => {
+export const thunkSendMessage = (data: SendMessageRequest): AppThunk => {
     return (dispatch, getState) => {
-        ioClient.emit('message', data, (newMessage: MessageScheme) => {
-            dispatch(messengerActions.addMessage(newMessage));
+        ioClient.emit('message', data, (newMessage: MessageResponse) => {
+            dispatch(messengerActions.addMessage(mapMessageResponseToScheme(newMessage)));
         });
     };
 };

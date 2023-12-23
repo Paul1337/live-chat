@@ -28,7 +28,7 @@ export const MessageInput = () => {
             <textarea
                 value={msgText}
                 onChange={e => setMsgText(e.target.value)}
-                className=' w-full flex-1 rounded-md p-4 border border-black'
+                className=' w-full flex-1 rounded-md p-4 border border-black resize-none'
                 placeholder='Enter new message'
             ></textarea>
             <Button onClick={handleSendClick} className='hover:bg-slate-300 p-2 rounded-md w-52 mt-2'>

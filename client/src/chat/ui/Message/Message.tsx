@@ -1,23 +1,30 @@
 import React, { FC } from 'react';
 
+interface OwnerData {
+    firstName: string;
+    lastName: string;
+}
+
 interface MessageProps {
     text: string;
     date?: Date;
-    from?: {
-        name: string;
-        photo: string;
-    };
+    ownerData?: OwnerData;
     isMine: boolean;
 }
 
+const getOwnerName = (ownerData?: OwnerData) => {
+    if (!ownerData) return 'Him';
+    return `${ownerData.firstName} ${ownerData.lastName}`;
+};
+
 export const Message: FC<MessageProps> = props => {
-    const { text, isMine, date } = props;
+    const { text, isMine, date, ownerData } = props;
     return (
         <div className='border-blue-500 p-4 m-4 rounded-md border'>
             <div className=' flex justify-between border-b-blue-500 border-b p-2 items-center'>
                 <div className='flex items-center justify-between'>
-                    <div className={isMine ? 'text-green-500' : 'text-red-500'}>
-                        {isMine ? 'Me' : 'Him'}
+                    <div className={(isMine ? 'text-green-500' : 'text-red-500').concat(' font-medium')}>
+                        {isMine ? 'Me' : getOwnerName(ownerData)}
                     </div>
                     {date && (
                         <div className='ml-2 border p-2 rounded-md'>Sent at {date.toLocaleString()}</div>

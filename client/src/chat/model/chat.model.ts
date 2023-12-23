@@ -4,7 +4,7 @@ export interface UserInfo {
     lastName: string;
 }
 
-export interface ChatDto {
+export interface ChatResponse {
     users: Array<UserInfo>;
     groupName?: string;
     _id: string;

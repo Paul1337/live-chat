@@ -24,6 +24,7 @@ export const Messenger = () => {
                     messages.map(message => (
                         <Message
                             key={message._id}
+                            ownerData={message.ownerData}
                             isMine={message.owner === userData?.id}
                             text={message.text ?? ''}
                             date={message.createdAt ? new Date(message.createdAt) : undefined}

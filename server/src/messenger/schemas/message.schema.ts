@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { HydratedDocument, ObjectId, Types } from 'mongoose';
 import { User } from 'src/users/schemas/user.schema';
 
@@ -21,6 +21,17 @@ export class Message {
         ref: 'User',
     })
     owner: ObjectId;
+
+    @Prop(
+        raw({
+            firstName: String,
+            lastName: String,
+        }),
+    )
+    ownerData: {
+        firstName: string;
+        lastName: string;
+    };
 
     @Prop({
         required: true,

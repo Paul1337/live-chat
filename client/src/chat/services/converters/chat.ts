@@ -1,9 +1,9 @@
 import { UserDataScheme } from '../../../auth/slices/userSlice';
-import { ChatDto, ChatScheme } from '../../model/chat.model';
+import { ChatResponse, ChatScheme } from '../../model/chat.model';
 
-export const mapChatDtoToScheme =
+export const mapChatResponseToScheme =
     (userData: UserDataScheme) =>
-    (chatResp: ChatDto): ChatScheme => {
+    (chatResp: ChatResponse): ChatScheme => {
         let chatName = '';
         const isPrivateChat = chatResp.users.length === 2;
         if (isPrivateChat) {
@@ -11,7 +11,7 @@ export const mapChatDtoToScheme =
             const { firstName, lastName } = secondUser;
             chatName = `${firstName} ${lastName}`;
         } else {
-            chatName = chatResp.groupName ?? `Group`;
+            chatName = chatResp.groupName ?? `Group (${chatResp.users.length})`;
         }
         return {
             name: chatName,

@@ -1,4 +1,12 @@
-export interface MessageDto {
+export interface SendMessageRequest {
+    text?: string;
+    img?: string;
+
+    chatId: string;
+    owner: string;
+}
+
+export interface MessageResponse {
     _id?: string;
 
     text?: string;
@@ -6,6 +14,11 @@ export interface MessageDto {
 
     chatId: string;
     owner: string;
+
+    ownerData: {
+        firstName: string;
+        lastName: string;
+    };
 
     createdAt?: string;
 }
@@ -18,6 +31,11 @@ export interface MessageScheme {
 
     chatId: string;
     owner: string;
+
+    ownerData: {
+        firstName: string;
+        lastName: string;
+    };
 
     createdAt?: string;
 }

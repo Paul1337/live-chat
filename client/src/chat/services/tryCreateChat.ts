@@ -1,18 +1,18 @@
 import { axiosInstance } from '../../app/api/apiInstance';
 import { AppThunk } from '../../app/model/store.model';
-import { ChatDto } from '../model/chat.model';
+import { ChatResponse } from '../model/chat.model';
 import { chatActions } from '../slices/chatSlice';
-import { mapChatDtoToScheme } from './converters/chat';
+import { mapChatResponseToScheme } from './converters/chat';
 
-interface CreatePrivateChatData {
+interface CreatePrivateChatRequest {
     username: string;
 }
 
-export const thunkTryCreatePrivateChat = (data: CreatePrivateChatData): AppThunk<Promise<any>> => {
+export const thunkTryCreatePrivateChat = (data: CreatePrivateChatRequest): AppThunk<Promise<any>> => {
     return async (dispatch, getState) => {
         const user = getState().user.userData!;
-        const response = await axiosInstance.post<ChatDto>('/messenger/chats/createPrivate', data);
-        const chatScheme = mapChatDtoToScheme(user)(response.data);
+        const response = await axiosInstance.post<ChatResponse>('/messenger/chats/createPrivate', data);
+        const chatScheme = mapChatResponseToScheme(user)(response.data);
         console.log('chat scheme ', chatScheme);
         dispatch(chatActions.addChat(chatScheme));
         return Promise.resolve();

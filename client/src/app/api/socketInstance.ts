@@ -8,9 +8,6 @@ export const ioClient = io(URI, {
     auth: {
         token: getAuthToken(),
     },
-    // extraHeaders: {
-    //     Authorization: `Bearer ${getAuthToken()}`,
-    // },
 });
 
 export const connectSocket = () => {

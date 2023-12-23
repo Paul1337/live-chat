@@ -24,12 +24,8 @@ export class UsersService {
             .exec();
     }
 
-    async findOne(findUserDto: FindUserDto): Promise<User> {
-        const user = await this.userModel
-            .findOne<UserDocument>({
-                username: findUserDto.username,
-            })
-            .exec();
+    async findOne(findUserDto: Record<string, any>) {
+        const user = await this.userModel.findOne<UserDocument>(findUserDto).exec();
         return user;
     }
 
