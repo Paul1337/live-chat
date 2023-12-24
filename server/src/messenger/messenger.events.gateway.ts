@@ -1,5 +1,4 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import {
     ConnectedSocket,
     MessageBody,
@@ -8,13 +7,14 @@ import {
     SubscribeMessage,
     WebSocketGateway,
 } from '@nestjs/websockets';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
-import { MessageDto } from './dto/message.dto';
-import { Chat } from './schemas/chat.schema';
-import { Message } from './schemas/message.schema';
 import { UsersService } from 'src/users/users.service';
+import { MessageDto } from './dto/message.dto';
+import { ReadMessageDto } from './dto/read-message.dto';
+import { MessengerRepository } from './messenger.repository';
+import { MessengerService } from './messenger.service';
 
 @WebSocketGateway({
     cors: {
@@ -26,10 +26,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     clients: Map<string, Socket>;
 
     constructor(
-        @InjectModel(Message.name) private messageModel: Model<Message>,
         private authService: AuthService,
-        @InjectModel(Chat.name) private chatModel: Model<Chat>,
         private usersService: UsersService,
+        private messengerService: MessengerService,
+        private messengerRepository: MessengerRepository,
     ) {
         this.clients = new Map();
     }
@@ -45,6 +45,21 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         console.log('disconnected');
     }
 
+    @SubscribeMessage('read')
+    async readMessages(@MessageBody() readMessageDto: ReadMessageDto) {
+        const { chatId, userId } = readMessageDto;
+        console.log('Got read event', chatId, userId);
+        await this.messengerService.readChatMessages(userId, chatId);
+        const chat = await this.messengerRepository.loadChatById(new Types.ObjectId(chatId));
+        for (const user of chat.users) {
+            if (user.toString() === userId) continue;
+            const rightClient = this.clients.get(user.toString());
+            if (rightClient) {
+                rightClient.emit('read', readMessageDto);
+            }
+        }
+    }
+
     @SubscribeMessage('message')
     async handleNewMessage(@ConnectedSocket() client: Socket, @MessageBody() messageDto: MessageDto) {
         // const chat = await this.chatModel.findOne(new Types.ObjectId(messageDto.chatId)).exec();
@@ -57,20 +72,20 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const user = await this.usersService.findOne({ _id: userId });
         if (!user) throw new InternalServerErrorException('Message owner user is not found!');
 
-        const newMessage = new this.messageModel({
-            text: messageDto.text,
-            img: messageDto.img,
-            owner: new Types.ObjectId(userId),
-            chatId: new Types.ObjectId(messageDto.chatId),
-            ownerData: {
-                firstName: user.firstName,
-                lastName: user.lastName,
+        const newMessage = await this.messengerRepository.createMessage(
+            {
+                chatId: new Types.ObjectId(messageDto.chatId),
+                img: messageDto.img,
+                text: messageDto.text,
             },
-        });
-        await newMessage.save();
+            user,
+        );
 
         console.log('saved message', newMessage);
-        const chat = await this.chatModel.findOne(new Types.ObjectId(messageDto.chatId));
+        const chatOid = new Types.ObjectId(messageDto.chatId);
+        const chat = await this.messengerRepository.loadChatById(chatOid);
+        await this.messengerRepository.addChatUnread(chatOid, 1);
+
         for (const user of chat.users) {
             if (user.toString() === userId) continue;
             const rightClient = this.clients.get(user.toString());

@@ -32,6 +32,9 @@ export class User {
 
     @Prop()
     lastName: string;
+
+    @Prop()
+    profileImg: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

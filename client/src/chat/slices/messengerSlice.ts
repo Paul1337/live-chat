@@ -24,6 +24,9 @@ export const messengerSlice = createSlice({
         addMessage(state: MessengerSliceScheme, action: PayloadAction<MessageScheme>) {
             state.messages.push(action.payload);
         },
+        readAll(state: MessengerSliceScheme, action: PayloadAction<void>) {
+            state.messages.forEach(mes => (mes.isRead = true));
+        },
     },
 });
 

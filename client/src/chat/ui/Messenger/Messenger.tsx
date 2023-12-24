@@ -10,16 +10,18 @@ export const Messenger = () => {
     const isLoadingMessages = useAppSelector(state => state.messenger.isLoadingMessages);
 
     useEffect(() => {
-        if (messagesContRef.current) {
-            messagesContRef.current.scrollTo(0, messagesContRef.current.scrollHeight);
-        }
+        messagesContRef.current?.scrollTo(0, messagesContRef.current.scrollHeight);
     }, [messages]);
 
     return (
         <div className='m-2 overflow-y-auto flex-1 flex flex-col'>
-            <div ref={messagesContRef} className='flex-1 p-2 overflow-y-auto scroll-smooth'>
+            <div ref={messagesContRef} className='flex-1 p-2 overflow-y-auto'>
                 {isLoadingMessages ? (
                     <div className='text-center'>Is loading...</div>
+                ) : messages.length === 0 ? (
+                    <p className='text-center m-2 font-medium text-gray-500'>
+                        No messages yet, be first to send something :)
+                    </p>
                 ) : (
                     messages.map(message => (
                         <Message
@@ -27,6 +29,7 @@ export const Messenger = () => {
                             ownerData={message.ownerData}
                             isMine={message.owner === userData?.id}
                             text={message.text ?? ''}
+                            isRead={message.isRead}
                             date={message.createdAt ? new Date(message.createdAt) : undefined}
                         />
                     ))

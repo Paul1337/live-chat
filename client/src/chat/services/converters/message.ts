@@ -8,4 +8,5 @@ export const mapMessageResponseToScheme = (messageDto: MessageResponse): Message
     text: messageDto.text,
     createdAt: messageDto.createdAt,
     ownerData: messageDto.ownerData,
+    isRead: messageDto.isRead,
 });

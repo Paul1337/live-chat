@@ -27,7 +27,6 @@ export const TopPanel = () => {
             ></div>
             <input
                 className='border p-2 rounded-md ml-2'
-                type='search'
                 placeholder='Chat name..'
                 value={searchText}
                 onChange={handleChange}

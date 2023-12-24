@@ -35,8 +35,10 @@ export class Message {
 
     @Prop({
         required: true,
+        type: Types.ObjectId,
+        ref: 'Chat',
     })
-    chatId: string;
+    chatId: Types.ObjectId;
 
     @Prop({
         default: false,

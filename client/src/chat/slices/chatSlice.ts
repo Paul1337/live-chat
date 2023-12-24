@@ -29,6 +29,11 @@ export const chatSlice = createSlice({
         setIsLoadingChats(state: ChatSliceScheme, action: PayloadAction<boolean>) {
             state.isLoadingChats = action.payload;
         },
+        readChat(state: ChatSliceScheme, action: PayloadAction<string>) {
+            const chat = state.chatList.find(chat => chat.chatId === action.payload);
+            if (!chat) return state;
+            chat.unreadCount = 0;
+        },
     },
 });
 

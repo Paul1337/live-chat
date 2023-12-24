@@ -21,6 +21,9 @@ export class Chat {
 
     @Prop()
     createdAt: Date;
+
+    @Prop()
+    unreadCount: number;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

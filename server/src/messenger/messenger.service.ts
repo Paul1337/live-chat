@@ -1,46 +1,23 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { Chat } from './schemas/chat.schema';
-import { Message } from './schemas/message.schema';
-import { CreatePrivateChatDto } from './dto/create-chat.dto';
+import { Types } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
-
-export interface PopulatedUser {
-    username: string;
-    firstName: string;
-    lastName: string;
-}
+import { CreatePrivateChatDto } from './dto/create-chat.dto';
+import { MessengerRepository } from './messenger.repository';
+import { Message } from './schemas/message.schema';
 
 @Injectable()
 export class MessengerService {
     constructor(
-        @InjectModel(Chat.name) private chatModel: Model<Chat>,
-        @InjectModel(Message.name) private messageModel: Model<Message>,
         private usersService: UsersService,
+        private messengerRepository: MessengerRepository,
     ) {}
 
     async getUserChats(userId: string) {
-        console.log('get chats for', userId);
-        const chats = await this.chatModel
-            .find({
-                users: new Types.ObjectId(userId),
-            })
-            .populate<{
-                users: Array<PopulatedUser>;
-            }>('users', ['username', 'firstName', 'lastName'])
-            .exec();
-
-        return chats;
+        return this.messengerRepository.loadChatsWithUserdata(new Types.ObjectId(userId));
     }
 
     async getChatMessages(userId: string, chatId: string): Promise<Message[]> {
-        const messages = await this.messageModel
-            .find({
-                chatId: new Types.ObjectId(chatId),
-            })
-            .exec();
-        return messages;
+        return this.messengerRepository.loadChatMessages(new Types.ObjectId(chatId));
     }
 
     async createPrivateChat(userId: string, chatDto: CreatePrivateChatDto) {
@@ -54,38 +31,31 @@ export class MessengerService {
 
         console.log('user id', userId);
         console.log('recipient id', recipientId);
+        const userOid = new Types.ObjectId(userId);
 
-        const chat = await this.chatModel
-            .findOne({
-                $and: [
-                    {
-                        users: {
-                            $size: 2,
-                        },
-                    },
-                    {
-                        users: new Types.ObjectId(userId),
-                    },
-                    {
-                        users: recipientId,
-                    },
-                ],
-            })
-            .exec();
-        console.log('chat', chat);
+        const chat = await this.messengerRepository.findPrivateChat(userOid, recipientId);
         const chatExists = Boolean(chat);
-
         if (chatExists) throw new InternalServerErrorException('Chat already exists');
 
-        const newChat = await this.chatModel.create({
-            users: [new Types.ObjectId(userId), recipientId],
-        });
-        const newChatPopulated = await newChat.populate<{
-            users: Array<PopulatedUser>;
-        }>('users', ['username', 'firstName', 'lastName']);
+        const newChat = await this.messengerRepository.createPrivateChat(userOid, recipientId);
 
-        console.log(newChat);
+        console.log('new chat', newChat);
 
-        return newChatPopulated;
+        return newChat;
+    }
+
+    async readChatMessages(userId: string, chatId: string) {
+        await this.messengerRepository.markReadMessages(
+            new Types.ObjectId(userId),
+            new Types.ObjectId(chatId),
+        );
+        await this.messengerRepository.resetChatUnread(new Types.ObjectId(chatId));
+    }
+
+    async readMessage(userId: string, messageId: string) {
+        await this.messengerRepository.markReadMessage(
+            new Types.ObjectId(userId),
+            new Types.ObjectId(messageId),
+        );
     }
 }

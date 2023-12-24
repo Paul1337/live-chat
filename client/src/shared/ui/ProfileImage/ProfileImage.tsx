@@ -14,9 +14,13 @@ export const ProfileImage: FC<ProfileImageProps> = props => {
     };
     return (
         <div
-            className={'w-8 h-8 bg-cover bg-center '.concat(className ?? '')}
+            className={'w-8 h-8 bg-cover bg-center rounded-full '.concat(className ?? '')}
             style={photoStyle}
             {...otherProps}
+            onError={({ currentTarget }) => {
+                console.log('error', currentTarget);
+                currentTarget.style.backgroundImage = defaultProfile;
+            }}
         ></div>
     );
 };

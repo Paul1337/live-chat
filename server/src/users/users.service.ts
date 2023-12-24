@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { FindUserDto } from './dto/find-user-dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -33,5 +33,17 @@ export class UsersService {
         const newUser = new this.userModel(createUserDto);
         await newUser.save();
         return newUser;
+    }
+
+    async saveUserProfileImage(userId: string, imageSrc: string) {
+        const updateRes = await this.userModel.updateOne(
+            {
+                _id: new Types.ObjectId(userId),
+            },
+            {
+                profileImg: imageSrc,
+            },
+        );
+        console.log('upd res', updateRes);
     }
 }

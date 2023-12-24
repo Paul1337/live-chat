@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from 'src/users/users.module';
 import { Chat, ChatSchema } from './schemas/chat.schema';
 import { AuthModule } from 'src/auth/auth.module';
+import { MessengerRepository } from './messenger.repository';
 
 @Module({
     imports: [
@@ -21,6 +22,6 @@ import { AuthModule } from 'src/auth/auth.module';
         AuthModule,
     ],
     controllers: [MessengerController],
-    providers: [MessengerService, EventsGateway],
+    providers: [MessengerService, EventsGateway, MessengerRepository],
 })
 export class MessengerModule {}

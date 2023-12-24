@@ -2,16 +2,13 @@ import { axiosInstance } from '../../app/api/apiInstance';
 import { ioClient } from '../../app/api/socketInstance';
 import { AppThunk } from '../../app/model/store.model';
 import { setAuthToken } from '../data/token';
+import { LoginResponse } from '../model/user.model';
 import { UserDataScheme, userActions } from '../slices/userSlice';
+import { mapUserResponseDataToData } from './converters/user';
 
 interface ThunkLogInData {
     username: string;
     password: string;
-}
-
-interface LoginResponse {
-    authToken: string;
-    userData: UserDataScheme;
 }
 
 export const thunkLogIn = (data: ThunkLogInData): AppThunk<Promise<any>> => {
@@ -24,7 +21,7 @@ export const thunkLogIn = (data: ThunkLogInData): AppThunk<Promise<any>> => {
         };
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
         dispatch(userActions.setAuthed(true));
-        dispatch(userActions.setUserData(userData));
+        dispatch(userActions.setUserData(mapUserResponseDataToData(userData)));
         return Promise.resolve();
     };
 };

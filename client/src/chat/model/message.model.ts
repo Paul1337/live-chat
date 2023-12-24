@@ -21,6 +21,7 @@ export interface MessageResponse {
     };
 
     createdAt?: string;
+    isRead: boolean;
 }
 
 export interface MessageScheme {
@@ -38,6 +39,7 @@ export interface MessageScheme {
     };
 
     createdAt?: string;
+    isRead: boolean;
 }
 
 export type MessageListType = Array<MessageScheme>;

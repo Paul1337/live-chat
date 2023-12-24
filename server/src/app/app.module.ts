@@ -4,11 +4,17 @@ import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
 import { MessengerModule } from '../messenger/messenger.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ProfileModule } from 'src/profile/profile.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import path from 'path';
 
 const { DB_USER, DB_PASSWORD } = process.env;
-console.log(`mongodb://${DB_USER}:${encodeURIComponent(DB_PASSWORD)}@m130.ru:27017/live-chat`);
+
 @Module({
     imports: [
+        ServeStaticModule.forRoot({
+            rootPath: path.join(__dirname, '../..', 'static'),
+        }),
         AuthModule,
         MessengerModule,
         MongooseModule.forRoot(
@@ -18,6 +24,7 @@ console.log(`mongodb://${DB_USER}:${encodeURIComponent(DB_PASSWORD)}@m130.ru:270
                 dbName: 'live-chat',
             },
         ),
+        ProfileModule,
     ],
     controllers: [AppController],
     providers: [AppService],

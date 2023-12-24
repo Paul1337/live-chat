@@ -9,25 +9,32 @@ export class MessengerController {
 
     @Get('chats')
     getUserChats(@Req() req: RequestExtended) {
-        const user = req.user;
-        return this.messengerService.getUserChats(user.id);
+        return this.messengerService.getUserChats(req.user.id);
     }
 
     @Get('chats/:id')
-    getChatMessages(@Req() req: RequestExtended, @Param('id') id: string) {
-        const user = req.user;
-        return this.messengerService.getChatMessages(user.id, id);
+    async getChatMessages(@Req() req: RequestExtended, @Param('id') id: string) {
+        return this.messengerService.getChatMessages(req.user.id, id);
     }
 
     @Post('chats/createPrivate')
     createPrivateChat(@Req() req: RequestExtended, @Body() body: CreatePrivateChatDto) {
-        const user = req.user;
-        return this.messengerService.createPrivateChat(user.id, body);
+        return this.messengerService.createPrivateChat(req.user.id, body);
     }
 
     @Post('chats/createGroup')
     createGroupChat(@Req() req: RequestExtended, @Body() body: CreateGroupChatDto) {
         const user = req.user;
         // return this.messengerService.createGroupChat(user.id, body);
+    }
+
+    @Post('chats/:id/read')
+    readChat(@Req() req: RequestExtended, @Param('id') id: string) {
+        return this.messengerService.readChatMessages(req.user.id, id);
+    }
+
+    @Post('readMessage/:id')
+    readChatMessage(@Req() req: RequestExtended, @Param('id') id: string) {
+        return this.messengerService.readMessage(req.user.id, id);
     }
 }
