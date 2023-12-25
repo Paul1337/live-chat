@@ -62,7 +62,7 @@ export const ProfileData = () => {
                             onChange={handleFileInputChange}
                             ref={inputFileRef}
                             type='file'
-                            className='absolute opacity-0'
+                            className='absolute opacity-0 w-0 h-0'
                         />
                     </div>
                 </div>
