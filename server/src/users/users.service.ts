@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './schemas/user.schema';
 import { Model, Types } from 'mongoose';
-import { FindUserDto } from './dto/find-user-dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { User, UserDocument } from './schemas/user.schema';
+import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 
 export type FindAllResponse = Array<{
     username: string;
@@ -30,7 +29,13 @@ export class UsersService {
     }
 
     async createOne(createUserDto: CreateUserDto): Promise<User> {
-        const newUser = new this.userModel(createUserDto);
+        const newUser = new this.userModel({
+            email: createUserDto.email,
+            username: createUserDto.username,
+            firstName: createUserDto.firstName,
+            lastName: createUserDto.lastName,
+            password: createUserDto.password,
+        });
         await newUser.save();
         return newUser;
     }
