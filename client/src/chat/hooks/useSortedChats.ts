@@ -9,7 +9,9 @@ export const useSortedChats = () => {
     useEffect(() => {
         setSortedChatItems(
             [...chatItems].sort((chat1, chat2) => {
-                return -chat1.unreadCount + chat2.unreadCount;
+                if (!chat1.lastActivity) return 1;
+                if (!chat2.lastActivity) return -1;
+                return -new Date(chat1.lastActivity).getTime() + new Date(chat2.lastActivity).getTime();
             })
         );
     }, [chatItems]);

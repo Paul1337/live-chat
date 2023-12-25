@@ -58,4 +58,12 @@ export class MessengerService {
             new Types.ObjectId(messageId),
         );
     }
+
+    async markNewMessageInChat(chatId: string) {
+        const chatOid = new Types.ObjectId(chatId);
+        const chat = await this.messengerRepository.loadChatById(chatOid);
+        await this.messengerRepository.addChatUnread(chatOid, 1);
+
+        return chat;
+    }
 }

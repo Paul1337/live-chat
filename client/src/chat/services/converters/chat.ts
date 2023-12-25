@@ -20,5 +20,6 @@ export const mapChatResponseToScheme =
             unreadCount: chatResp.unreadCount,
             chatId: chatResp._id,
             photo: photo,
+            lastActivity: chatResp.lastActivity,
         };
     };

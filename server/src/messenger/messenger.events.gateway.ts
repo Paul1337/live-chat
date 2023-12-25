@@ -82,9 +82,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         );
 
         console.log('saved message', newMessage);
-        const chatOid = new Types.ObjectId(messageDto.chatId);
-        const chat = await this.messengerRepository.loadChatById(chatOid);
-        await this.messengerRepository.addChatUnread(chatOid, 1);
+        const chat = await this.messengerService.markNewMessageInChat(messageDto.chatId);
 
         for (const user of chat.users) {
             if (user.toString() === userId) continue;

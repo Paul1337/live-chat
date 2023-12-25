@@ -1,4 +1,10 @@
-import { ForbiddenException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ForbiddenException,
+    HttpException,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
@@ -46,7 +52,13 @@ export class AuthService {
         if (userWithSameUsername)
             throw new HttpException(`User with username ${createUserDto.username} already exists`, 500);
         createUserDto.password = bcrypt.hashSync(createUserDto.password, 5);
-        await this.usersService.createOne(createUserDto);
+        try {
+            await this.usersService.createOne(createUserDto);
+        } catch (err) {
+            throw new BadRequestException([
+                'Check your email and username, they must be unique across all accounts',
+            ]);
+        }
         return {
             message: 'ok',
         };

@@ -10,6 +10,7 @@ export interface ChatResponse {
     groupName?: string;
     unreadCount: number;
     _id: string;
+    lastActivity: string;
 }
 
 export interface ChatScheme {
@@ -17,6 +18,7 @@ export interface ChatScheme {
     name: string;
     unreadCount: number;
     photo?: string;
+    lastActivity?: string;
 }
 
 export type ChatListType = Array<ChatScheme>;

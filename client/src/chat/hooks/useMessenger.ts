@@ -36,6 +36,8 @@ export const useMessenger = () => {
                 });
             } else {
                 dispatch(thunkLoadChats()); // updating all chats
+
+                // todo: just increment unreadCount by 1 and update lastActivity to now of the chat, in which message has come
             }
         };
 

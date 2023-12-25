@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
+import { DateUnit, HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
 export type ChatDocument = HydratedDocument<Chat>;
 
@@ -21,6 +21,9 @@ export class Chat {
 
     @Prop()
     createdAt: Date;
+
+    @Prop()
+    lastActivity: Date;
 
     @Prop()
     unreadCount: number;
