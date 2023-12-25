@@ -13,6 +13,16 @@ const initialState: ChatSliceScheme = {
     searchText: '',
 };
 
+interface SetActivityPayload {
+    chatId: string;
+    lastActivity: Date;
+}
+
+interface IncrementChatUnreadPayload {
+    chatId: string;
+    amount: number;
+}
+
 export const chatSlice = createSlice({
     initialState,
     name: 'chat',
@@ -33,6 +43,16 @@ export const chatSlice = createSlice({
             const chat = state.chatList.find(chat => chat.chatId === action.payload);
             if (!chat) return state;
             chat.unreadCount = 0;
+        },
+        updateChatActivity(state: ChatSliceScheme, action: PayloadAction<SetActivityPayload>) {
+            const chat = state.chatList.find(chat => chat.chatId === action.payload.chatId);
+            if (!chat) return state;
+            chat.lastActivity = action.payload.lastActivity.toString();
+        },
+        incrementChatUnread(state: ChatSliceScheme, action: PayloadAction<IncrementChatUnreadPayload>) {
+            const chat = state.chatList.find(chat => chat.chatId === action.payload.chatId);
+            if (!chat) return state;
+            chat.unreadCount += action.payload.amount;
         },
     },
 });
