@@ -35,9 +35,19 @@ export const useMessenger = () => {
                     userId: userData.id,
                 });
             } else {
-                dispatch(thunkLoadChats()); // updating all chats
-
-                // todo: just increment unreadCount by 1 and update lastActivity to now of the chat, in which message has come
+                // dispatch(thunkLoadChats()); // updating all chats
+                dispatch(
+                    chatActions.updateChatActivity({
+                        chatId: message.chatId,
+                        lastActivity: new Date(),
+                    })
+                );
+                dispatch(
+                    chatActions.incrementChatUnread({
+                        chatId: message.chatId,
+                        amount: 1,
+                    })
+                );
             }
         };
 
