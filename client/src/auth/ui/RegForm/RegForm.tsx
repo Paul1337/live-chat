@@ -34,7 +34,7 @@ export const RegForm: FC<RegFormProps> = props => {
                 })
                 .catch(e => {
                     console.log(e.response.data.message);
-                    setError(e.response.data.message.join('; '));
+                    setError(e.response?.data?.message?.join('; '));
                 });
         } else {
             setError('Passwords do not match');

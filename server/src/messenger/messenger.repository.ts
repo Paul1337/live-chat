@@ -56,6 +56,7 @@ export class MessengerRepository {
                     $inc: {
                         unreadCount: count,
                     },
+                    lastActivity: new Date(),
                 },
             )
             .exec();
