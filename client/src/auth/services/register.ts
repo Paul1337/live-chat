@@ -6,6 +6,8 @@ interface ThunkRegisterData {
     email: string;
     username: string;
     password: string;
+    firstName: string;
+    lastName: string;
 }
 
 interface RegResponse {}

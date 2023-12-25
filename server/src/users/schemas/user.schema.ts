@@ -7,7 +7,6 @@ export type UserDocument = HydratedDocument<User>;
     collection: 'users',
 })
 export class User {
-    // @Prop()
     _id: Types.ObjectId;
 
     @Prop({

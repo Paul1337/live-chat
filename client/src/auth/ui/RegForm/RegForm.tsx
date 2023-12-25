@@ -27,7 +27,7 @@ export const RegForm: FC<RegFormProps> = props => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (password === confirmPassword) {
-            const data = { username, email, password };
+            const data = { username, email, password, firstName, lastName };
             dispatch(thunkRegister(data))
                 .then(() => {
                     navigate('/auth/login');
