@@ -79,7 +79,10 @@ export class MessengerRepository {
 
     async loadChatMessages(chatId: Types.ObjectId) {
         console.log('loading messages for chat', chatId);
-        const count = await this.messageModel.countDocuments();
+        const count = await this.messageModel.countDocuments({
+            chatId,
+        });
+        console.log('count', count);
         const messages = await this.messageModel
             .find({
                 chatId: chatId,
