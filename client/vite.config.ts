@@ -9,4 +9,7 @@ export default defineConfig({
         outDir: '../server/static',
         emptyOutDir: false,
     },
+	server: {
+		port: 8001
+	}
 });
