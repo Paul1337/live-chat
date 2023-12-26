@@ -39,7 +39,7 @@ export const useMessenger = () => {
                 dispatch(
                     chatActions.updateChatActivity({
                         chatId: message.chatId,
-                        lastActivity: new Date(),
+                        lastActivity: new Date().toString(),
                     })
                 );
                 dispatch(
