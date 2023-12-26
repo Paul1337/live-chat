@@ -15,7 +15,7 @@ const initialState: ChatSliceScheme = {
 
 interface SetActivityPayload {
     chatId: string;
-    lastActivity: Date;
+    lastActivity: string;
 }
 
 interface IncrementChatUnreadPayload {
@@ -47,7 +47,7 @@ export const chatSlice = createSlice({
         updateChatActivity(state: ChatSliceScheme, action: PayloadAction<SetActivityPayload>) {
             const chat = state.chatList.find(chat => chat.chatId === action.payload.chatId);
             if (!chat) return state;
-            chat.lastActivity = action.payload.lastActivity.toString();
+            chat.lastActivity = action.payload.lastActivity;
         },
         incrementChatUnread(state: ChatSliceScheme, action: PayloadAction<IncrementChatUnreadPayload>) {
             const chat = state.chatList.find(chat => chat.chatId === action.payload.chatId);

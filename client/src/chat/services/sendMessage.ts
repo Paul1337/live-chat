@@ -12,7 +12,7 @@ export const thunkSendMessage = (data: SendMessageRequest): AppThunk => {
             dispatch(
                 chatActions.updateChatActivity({
                     chatId: data.chatId,
-                    lastActivity: new Date(),
+                    lastActivity: new Date().toString(),
                 })
             );
         });

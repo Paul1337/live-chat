@@ -35,8 +35,6 @@ export class AuthService {
         const payload: UserPayloadScheme = {
             email: user.email,
             username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
             id: user._id.toString(),
         };
         return {

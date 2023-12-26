@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { RequestExtended } from 'src/auth/model/request.model';
 import { MessengerService } from './messenger.service';
 import { CreateGroupChatDto, CreatePrivateChatDto } from './dto/create-chat.dto';
+import { VerifyUserChatGuard } from './guards/verify-user-chat.guard';
 
 @Controller('messenger')
 export class MessengerController {
@@ -13,6 +14,7 @@ export class MessengerController {
     }
 
     @Get('chats/:id')
+    @UseGuards(VerifyUserChatGuard)
     async getChatMessages(@Req() req: RequestExtended, @Param('id') id: string) {
         return this.messengerService.getChatMessages(req.user.id, id);
     }
@@ -29,12 +31,8 @@ export class MessengerController {
     }
 
     @Post('chats/:id/read')
+    @UseGuards(VerifyUserChatGuard)
     readChat(@Req() req: RequestExtended, @Param('id') id: string) {
         return this.messengerService.readChatMessages(req.user.id, id);
-    }
-
-    @Post('readMessage/:id')
-    readChatMessage(@Req() req: RequestExtended, @Param('id') id: string) {
-        return this.messengerService.readMessage(req.user.id, id);
     }
 }

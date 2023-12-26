@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { Chat, ChatSchema } from './schemas/chat.schema';
 import { AuthModule } from 'src/auth/auth.module';
 import { MessengerRepository } from './messenger.repository';
+import { Unread, UnreadSchema } from './schemas/unread.schema';
 
 @Module({
     imports: [
@@ -16,6 +17,10 @@ import { MessengerRepository } from './messenger.repository';
             {
                 name: Chat.name,
                 schema: ChatSchema,
+            },
+            {
+                name: Unread.name,
+                schema: UnreadSchema,
             },
         ]),
         UsersModule,

@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Chat } from './schemas/chat.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/users/schemas/user.schema';
+import { Unread } from './schemas/unread.schema';
 
 export interface PopulatedUser {
     username: string;
@@ -20,57 +21,137 @@ interface CreateMessageData {
 
 @Injectable()
 export class MessengerRepository {
+    private MaxMessagesCount: number;
+
     constructor(
         @InjectModel(Chat.name) private chatModel: Model<Chat>,
         @InjectModel(Message.name) private messageModel: Model<Message>,
-    ) {}
+        @InjectModel(Unread.name) private unreadModel: Model<Unread>,
+    ) {
+        this.MaxMessagesCount = 30;
+    }
 
     async loadChatsWithUserdata(userId: Types.ObjectId) {
         console.log('loading chats for user', userId);
-        const chats = await this.chatModel
-            .find({
-                users: userId,
-            })
-            .populate<{ users: Array<PopulatedUser> }>('users', [
-                'username',
-                'firstName',
-                'lastName',
-                'profileImg',
-            ])
-            .exec();
+        const chats = await this.chatModel.aggregate([
+            {
+                $match: {
+                    users: userId,
+                },
+            },
+            {
+                $lookup: {
+                    as: 'unreads',
+                    from: 'unreads',
+                    localField: '_id',
+                    foreignField: 'chatId',
+                    pipeline: [
+                        {
+                            $match: {
+                                userId: userId,
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                count: 1,
+                            },
+                        },
+                    ],
+                },
+            },
+            // {
+            //     $set: {
+            //         unreadCount: 0,
+            //     },
+            // },
+            {
+                $set: {
+                    unreadCount: {
+                        $arrayElemAt: ['$unreads.count', 0],
+                    },
+                },
+            },
+            {
+                $unset: 'unreads',
+            },
+        ]);
 
-        return chats;
+        const chatsWithUserData = await this.chatModel.populate(chats, {
+            path: 'users',
+            options: {
+                projection: {
+                    username: 1,
+                    firstName: 1,
+                    lastName: 1,
+                    profileImg: 1,
+                },
+            },
+        });
+
+        return chatsWithUserData;
     }
 
     async loadChatById(chatId: Types.ObjectId) {
         return this.chatModel.findOne(chatId).exec();
     }
 
-    async addChatUnread(chatId: Types.ObjectId, count: number) {
+    async markNewMessageAndGetChat(chatId: Types.ObjectId, msgOwnerId: Types.ObjectId, count: number) {
+        const chat = await this.loadChatById(chatId);
+        const userIds = chat.users.filter(userId => !userId.equals(msgOwnerId));
+
+        const updResult = await this.unreadModel.updateMany(
+            {
+                chatId,
+                userId: {
+                    $in: userIds,
+                },
+            },
+            {
+                $inc: {
+                    count: count,
+                },
+            },
+        );
+
+        if (updResult.modifiedCount === 0) {
+            const unreadCreatePromises = [];
+            for (const userId of userIds) {
+                unreadCreatePromises.push(
+                    this.unreadModel.create({
+                        chatId,
+                        userId,
+                        count,
+                    }),
+                );
+            }
+            await Promise.all(unreadCreatePromises);
+        }
+
         await this.chatModel
             .updateOne(
                 {
                     _id: chatId,
                 },
                 {
-                    $inc: {
-                        unreadCount: count,
-                    },
                     lastActivity: new Date(),
                 },
             )
             .exec();
+
+        return chat;
     }
 
-    async resetChatUnread(chatId: Types.ObjectId) {
-        await this.chatModel
+    async resetChatUnread(chatId: Types.ObjectId, userId: Types.ObjectId) {
+        await this.unreadModel
             .updateOne(
                 {
-                    _id: chatId,
+                    chatId,
+                    userId,
                 },
                 {
                     $set: {
-                        unreadCount: 0,
+                        count: 0,
                     },
                 },
             )
@@ -87,7 +168,7 @@ export class MessengerRepository {
             .find({
                 chatId: chatId,
             })
-            .skip(Math.max(count - 32, 0))
+            .skip(Math.max(count - this.MaxMessagesCount, 0))
             .exec();
         return messages;
     }
@@ -174,5 +255,13 @@ export class MessengerRepository {
         });
         await newMessage.save();
         return newMessage;
+    }
+
+    async verifyUserHasChat(userId: Types.ObjectId, chatId: Types.ObjectId) {
+        const chats = await this.chatModel.find({
+            _id: chatId,
+            users: userId,
+        });
+        return chats.length === 1;
     }
 }

@@ -45,24 +45,21 @@ export class MessengerService {
     }
 
     async readChatMessages(userId: string, chatId: string) {
-        await this.messengerRepository.markReadMessages(
-            new Types.ObjectId(userId),
-            new Types.ObjectId(chatId),
-        );
-        await this.messengerRepository.resetChatUnread(new Types.ObjectId(chatId));
-    }
-
-    async readMessage(userId: string, messageId: string) {
-        await this.messengerRepository.markReadMessage(
-            new Types.ObjectId(userId),
-            new Types.ObjectId(messageId),
-        );
-    }
-
-    async markNewMessageInChat(chatId: string) {
         const chatOid = new Types.ObjectId(chatId);
-        const chat = await this.messengerRepository.loadChatById(chatOid);
-        await this.messengerRepository.addChatUnread(chatOid, 1);
+        const userOid = new Types.ObjectId(userId);
+        await this.messengerRepository.markReadMessages(userOid, chatOid);
+        await this.messengerRepository.resetChatUnread(chatOid, userOid);
+    }
+
+    async markNewMessageInChat(chatId: string, messageOwnerId: string) {
+        const chatOid = new Types.ObjectId(chatId);
+        const messageOwnerOid = new Types.ObjectId(messageOwnerId);
+
+        const chat = await this.messengerRepository.markNewMessageAndGetChat(
+            chatOid,
+            messageOwnerOid,
+            1,
+        );
 
         return chat;
     }
