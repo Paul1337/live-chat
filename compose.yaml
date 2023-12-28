@@ -3,6 +3,7 @@ version: '3.8'
 services:
     mongo:
         image: mongo
+        container_name: live-chat_mongo
         restart: unless-stopped
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
@@ -14,11 +15,14 @@ services:
 
     app:
         build: .
+        container_name: live-chat_app
         restart: unless-stopped
         networks:
             - live-chat-net
         ports:
             - 8005:8002
+        depends_on:
+            - mongo
 
 networks:
     live-chat-net:

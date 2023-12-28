@@ -9,4 +9,4 @@ COPY ./server/static ./static
 RUN npm install
 
 EXPOSE 8002
-CMD ['node', './main.js']
+CMD ["node", "./main.js"]
