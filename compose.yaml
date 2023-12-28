@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+    mongo:
+        image: mongo
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+        volumes:
+            - mongo-data:/data/db
+        networks:
+            - live-chat-net
+
+    app:
+        build: /root/projects/live-chat/
+        restart: unless-stopped
+        networks:
+            - live-chat-net
+        ports:
+            - 8005:8002
+
+networks:
+    live-chat-net:
+        driver: bridge
+
+volumes:
+    mongo-data:
