@@ -17,7 +17,7 @@ const { DB_USER, DB_PASSWORD } = process.env;
         }),
         AuthModule,
         MessengerModule,
-        MongooseModule.forRoot(`mongodb://${DB_USER}:${encodeURIComponent(DB_PASSWORD)}mongo:27017/`, {
+        MongooseModule.forRoot(`mongodb://${DB_USER}:${encodeURIComponent(DB_PASSWORD)}@mongo:27017/`, {
             serverSelectionTimeoutMS: 5000,
             dbName: 'live-chat',
         }),
