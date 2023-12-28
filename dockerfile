@@ -8,4 +8,4 @@ COPY ./server/package*.json .
 RUN npm install
 
 EXPOSE 8002
-CMD ['node', './dist/main.js']
+CMD ['node', './main.js']
