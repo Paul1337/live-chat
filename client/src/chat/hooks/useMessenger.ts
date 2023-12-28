@@ -35,7 +35,6 @@ export const useMessenger = () => {
                     userId: userData.id,
                 });
             } else {
-                // dispatch(thunkLoadChats()); // updating all chats
                 dispatch(
                     chatActions.updateChatActivity({
                         chatId: message.chatId,
