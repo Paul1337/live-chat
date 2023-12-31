@@ -2,25 +2,34 @@ version: '3.8'
 
 services:
     mongo:
-        image: mongo
+        build:
+            context: .
+            dockerfile: Dockerfile.mongo
         container_name: live-chat_mongo
         restart: unless-stopped
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
         volumes:
             - mongo-data:/data/db
         networks:
             - live-chat-net
+        ports:
+            - 27016:27017
 
     app:
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile.app
         container_name: live-chat_app
+        working_dir: /home/node/app
         restart: unless-stopped
         networks:
             - live-chat-net
         ports:
             - 8005:8002
+        volumes:
+            - app-uploads:/home/node/app/static/uploads
         depends_on:
             - mongo
 
@@ -30,3 +39,4 @@ networks:
 
 volumes:
     mongo-data:
+    app-uploads:

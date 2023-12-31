@@ -18,7 +18,7 @@ export class UsersService {
                 {},
                 {
                     username: true,
-                },
+                }
             )
             .exec();
     }
@@ -47,7 +47,7 @@ export class UsersService {
             },
             {
                 profileImg: imageSrc,
-            },
+            }
         );
         console.log('upd res', updateRes);
     }

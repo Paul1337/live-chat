@@ -16,18 +16,18 @@ import { UserPayloadScheme } from './model/request.model';
 export class AuthService {
     constructor(
         private jwtService: JwtService,
-        private usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     async logIn(loginUserDto: LogInUserDto) {
         const user = await this.usersService.findOne({
             username: loginUserDto.username,
         });
-        if (!user) throw new ForbiddenException();
+        if (!user) throw new ForbiddenException(`User with username '${loginUserDto.username}' not found`);
 
         const passwordHash = user.password;
         if (!bcrypt.compareSync(loginUserDto.password, passwordHash)) {
-            throw new ForbiddenException();
+            throw new ForbiddenException('Password is not correct');
         }
 
         console.log('pass ok');

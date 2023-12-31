@@ -1,17 +1,8 @@
-import {
-    Body,
-    Controller,
-    Get,
-    InternalServerErrorException,
-    Post,
-    Req,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LogInUserDto } from './dto/log-in-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Request } from 'express';
 import { Public } from './decorators/public.decorator';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LogInUserDto } from './dto/log-in-user.dto';
 import { RequestExtended } from './model/request.model';
 
 @Controller('auth')
