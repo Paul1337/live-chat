@@ -4,12 +4,14 @@ import { UsersService } from 'src/users/users.service';
 import { CreatePrivateChatDto } from './dto/create-chat.dto';
 import { MessengerRepository } from './messenger.repository';
 import { Message } from './schemas/message.schema';
+import { EditMessageDto } from './dto/edit-message.dto';
+import { RemoveMessageDto } from './dto/remove-message.dto';
 
 @Injectable()
 export class MessengerService {
     constructor(
         private usersService: UsersService,
-        private messengerRepository: MessengerRepository,
+        private messengerRepository: MessengerRepository
     ) {}
 
     async getUserChats(userId: string) {
@@ -55,11 +57,7 @@ export class MessengerService {
         const chatOid = new Types.ObjectId(chatId);
         const messageOwnerOid = new Types.ObjectId(messageOwnerId);
 
-        const chat = await this.messengerRepository.markNewMessageAndGetChat(
-            chatOid,
-            messageOwnerOid,
-            1,
-        );
+        const chat = await this.messengerRepository.markNewMessageAndGetChat(chatOid, messageOwnerOid, 1);
 
         return chat;
     }

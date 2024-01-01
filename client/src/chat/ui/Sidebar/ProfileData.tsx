@@ -1,11 +1,13 @@
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Button } from '../../../shared/ui/Button/Button';
 import { useAppDispatch, useAppSelector } from '../../../app/model/store.model';
 import { thunkLogout } from '../../../auth/services/logout';
 import { useNavigate } from 'react-router-dom';
 import { ProfileImage } from '../../../shared/ui/ProfileImage/ProfileImage';
+import DarkThemeImage from '../../assets/dark-theme-svgrepo-com.svg';
 import { thunkUploadPhoto } from '../../services/uploadPhoto';
 import { thunkLoadUserProfileData } from '../../services/loadUserProfileData';
+import classNames from 'classnames';
 
 export const ProfileData = () => {
     const { username } = useAppSelector(state => state.user.userData)!;
@@ -13,6 +15,7 @@ export const ProfileData = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const inputFileRef = useRef<HTMLInputElement>(null);
+    // const [isRotated, setIsRotated] = useState(false);
 
     const handleLogout = () => {
         dispatch(thunkLogout());
@@ -47,7 +50,7 @@ export const ProfileData = () => {
                 <p>
                     {profileData.firstName} {profileData.lastName}
                 </p>
-                <p className='text-center font-bold ml-2'>@{username}</p>
+                <p className='font-["Ubuntu"] text-center font-bold ml-2'>@{username}</p>
             </div>
             <div className='flex flex-row justify-between px-2 items-center'>
                 <div className='flex items-center'>
@@ -55,18 +58,28 @@ export const ProfileData = () => {
                     <div>
                         <Button
                             onClick={handleImageUpdloadClick}
-                            className='text-sm p-1'
+                            className=' font-["Ubuntu"] text-sm p-1'
                             text='upload image'
                         />
                         <input
                             onChange={handleFileInputChange}
                             ref={inputFileRef}
                             type='file'
-                            className='absolute opacity-0 w-0 h-0'
+                            className='font-["Ubuntu"] absolute opacity-0 w-0 h-0'
                         />
                     </div>
+
+                    {/* <img
+						onClick={() => {
+							setIsRotated((rotated) => !rotated);
+						}}
+						className={classNames('w-8 h-8 cursor-pointer', {
+							' rotate-180': isRotated,
+						})}
+						src={DarkThemeImage}
+					></img> */}
                 </div>
-                <Button text='Log out' onClick={handleLogout} />
+                <Button className='font-["Ubuntu"]' text='Log out' onClick={handleLogout} />
             </div>
         </div>
     );

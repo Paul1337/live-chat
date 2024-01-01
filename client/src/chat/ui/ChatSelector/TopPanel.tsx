@@ -26,13 +26,13 @@ export const TopPanel = () => {
                 style={{ backgroundImage: `url(${searchImg})` }}
             ></div>
             <input
-                className='border p-2 rounded-md ml-2'
+                className='font-["Ubuntu"] border p-2 rounded-md ml-2'
                 placeholder='Chat name..'
                 value={searchText}
                 onChange={handleChange}
             />
             <Button onClick={handleAddChatClick} className='w-9 h-9 p-0 border relative'>
-                <span className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>+</span>
+                <span className='font-["Ubuntu"] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>+</span>
             </Button>
 
             {showAddChat && <AddChatModal onClose={() => setShowAddChat(false)} />}

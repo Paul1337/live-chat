@@ -15,6 +15,9 @@ import { MessageDto } from './dto/message.dto';
 import { ReadMessageDto } from './dto/read-message.dto';
 import { MessengerRepository } from './messenger.repository';
 import { MessengerService } from './messenger.service';
+import { RemoveMessageDto } from './dto/remove-message.dto';
+import { EditMessageDto } from './dto/edit-message.dto';
+import { MessagesService } from './messages.service';
 
 @WebSocketGateway({
     cors: {
@@ -31,6 +34,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         private usersService: UsersService,
         private messengerService: MessengerService,
         private messengerRepository: MessengerRepository,
+        private messagesService: MessagesService
     ) {
         this.clients = new Map();
         this.tokendToIdMap = new Map();
@@ -52,11 +56,32 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.tokendToIdMap.delete(token);
     }
 
+    @SubscribeMessage('editMessage')
+    async editMessage(@MessageBody() editMessageDto: EditMessageDto, @ConnectedSocket() client: Socket) {
+        const token = client.handshake.auth.token;
+        const userId = this.tokendToIdMap.get(token);
+        if (!userId) throw new ForbiddenException('Unknown socket tries to edit message');
+        const success = await this.messagesService.tryEditMessage(userId, editMessageDto);
+        if (success) {
+            // for (const user of chat.users) {
+            //     if (user.toString() === userId) continue;
+            //     const rightClient = this.clients.get(user.toString());
+            //     if (rightClient) {
+            //         rightClient.emit('editedMessage', newMessage);
+            //     }
+            // }
+        }
+    }
+
+    @SubscribeMessage('removeMessage')
+    async removeMessage(@MessageBody() removeMessageDto: RemoveMessageDto, @ConnectedSocket() client: Socket) {
+        const token = client.handshake.auth.token;
+        const userId = this.tokendToIdMap.get(token);
+        if (!userId) throw new ForbiddenException('Unknown socket tries to remove message');
+    }
+
     @SubscribeMessage('read')
-    async readMessages(
-        @MessageBody() readMessageDto: ReadMessageDto,
-        @ConnectedSocket() client: Socket,
-    ) {
+    async readMessages(@MessageBody() readMessageDto: ReadMessageDto, @ConnectedSocket() client: Socket) {
         const { chatId, userId } = readMessageDto;
         console.log('Handle read event', chatId, userId);
 
@@ -67,7 +92,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
         const hasChatAccess = await this.messengerRepository.verifyUserHasChat(
             new Types.ObjectId(userId),
-            new Types.ObjectId(chatId),
+            new Types.ObjectId(chatId)
         );
         if (!hasChatAccess) {
             throw new ForbiddenException('User does not have access to this chat!');
@@ -96,7 +121,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
         const hasChatAccess = await this.messengerRepository.verifyUserHasChat(
             new Types.ObjectId(userId),
-            new Types.ObjectId(messageDto.chatId),
+            new Types.ObjectId(messageDto.chatId)
         );
         if (!hasChatAccess) {
             throw new ForbiddenException('User does not have access to this chat!');
@@ -111,7 +136,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 img: messageDto.img,
                 text: messageDto.text,
             },
-            user,
+            user
         );
 
         console.log('saved message', newMessage);

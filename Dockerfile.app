@@ -6,6 +6,7 @@ COPY ./server/dist ./src
 COPY ./server/.env .
 COPY ./server/package*.json .
 COPY ./server/static ./static
+RUN mkdir secrets
 
 RUN npm install
 

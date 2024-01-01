@@ -9,6 +9,7 @@ import { Chat, ChatSchema } from './schemas/chat.schema';
 import { AuthModule } from 'src/auth/auth.module';
 import { MessengerRepository } from './messenger.repository';
 import { Unread, UnreadSchema } from './schemas/unread.schema';
+import { MessagesService } from './messages.service';
 
 @Module({
     imports: [
@@ -27,6 +28,6 @@ import { Unread, UnreadSchema } from './schemas/unread.schema';
         AuthModule,
     ],
     controllers: [MessengerController],
-    providers: [MessengerService, EventsGateway, MessengerRepository],
+    providers: [MessengerService, EventsGateway, MessengerRepository, MessagesService],
 })
 export class MessengerModule {}

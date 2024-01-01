@@ -5,14 +5,15 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), 'VITE');
     return {
-        // base: '.',
+        base: '/',
         plugins: [react()],
         build: {
             outDir: '../server/static',
             emptyOutDir: false,
         },
         server: {
-            port: Number(env.VITE_DEV_PORT) ?? 8001,
+            port: env.DEV_SERVER_PORT ? Number(env.DEV_SERVER_PORT) : 8001,
+            // watch: {},
         },
     };
 });
