@@ -50,22 +50,18 @@ export const ProfileData = () => {
                 <p>
                     {profileData.firstName} {profileData.lastName}
                 </p>
-                <p className='font-["Ubuntu"] text-center font-bold ml-2'>@{username}</p>
+                <p className='text-center font-bold ml-2'>@{username}</p>
             </div>
             <div className='flex flex-row justify-between px-2 items-center'>
                 <div className='flex items-center'>
                     <ProfileImage className='w-12 h-12' src={profilePhotoSrc} />
                     <div>
-                        <Button
-                            onClick={handleImageUpdloadClick}
-                            className=' font-["Ubuntu"] text-sm p-1'
-                            text='upload image'
-                        />
+                        <Button onClick={handleImageUpdloadClick} className=' text-sm p-1' text='upload image' />
                         <input
                             onChange={handleFileInputChange}
                             ref={inputFileRef}
                             type='file'
-                            className='font-["Ubuntu"] absolute opacity-0 w-0 h-0'
+                            className='absolute opacity-0 w-0 h-0'
                         />
                     </div>
 
@@ -79,7 +75,7 @@ export const ProfileData = () => {
 						src={DarkThemeImage}
 					></img> */}
                 </div>
-                <Button className='font-["Ubuntu"]' text='Log out' onClick={handleLogout} />
+                <Button className='' text='Log out' onClick={handleLogout} />
             </div>
         </div>
     );

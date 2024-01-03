@@ -1,16 +1,20 @@
+import { RefObject, useEffect, useRef } from 'react';
 import { connectSocket, ioClient } from '../../app/api/socketInstance';
-import { MessageResponse, MessageScheme } from '../model/message.model';
 import { useAppDispatch, useAppSelector } from '../../app/model/store.model';
-import { messengerActions } from '../slices/messengerSlice';
-import { useEffect, useReducer, useRef } from 'react';
-import { useChatId } from './useChatId';
+import { MessageResponse } from '../model/message.model';
 import { mapMessageResponseToScheme } from '../services/converters/message';
-import { chatActions } from '../slices/chatSlice';
-import { thunkLoadChats } from '../services/loadMyChats';
 import { thunkLoadChatMessages } from '../services/loadChatMessages';
+import { chatActions } from '../slices/chatSlice';
+import { messengerActions } from '../slices/messengerSlice';
+import { useChatId } from './useChatId';
 
 interface ReadChatResponse {
     userId: string;
+    chatId: string;
+}
+
+interface RemoveMessageResponse {
+    messageId: string;
     chatId: string;
 }
 
@@ -34,6 +38,7 @@ export const useMessenger = () => {
                     chatId: currentChatIdRef.current,
                     userId: userData.id,
                 });
+                // messagesContRef.current?.scrollTo(0, messagesContRef.current.scrollHeight);
             } else {
                 dispatch(
                     chatActions.updateChatActivity({
@@ -52,9 +57,15 @@ export const useMessenger = () => {
 
         const handleReadChat = ({ chatId, userId }: ReadChatResponse) => {
             console.log('on read', chatId);
-            dispatch(chatActions.readChat(chatId));
+            // dispatch(chatActions.readChat(chatId));
             if (currentChatIdRef.current == chatId) {
                 dispatch(messengerActions.readAll());
+            }
+        };
+
+        const handleRemoveMessage = ({ chatId, messageId }: RemoveMessageResponse) => {
+            if (currentChatIdRef.current == chatId) {
+                dispatch(messengerActions.removeMessage(messageId));
             }
         };
 
@@ -62,10 +73,12 @@ export const useMessenger = () => {
 
         ioClient.on('message', handleNewMessage);
         ioClient.on('read', handleReadChat);
+        ioClient.on('remove-message', handleRemoveMessage);
 
         return () => {
             ioClient.off('message', handleNewMessage);
             ioClient.off('read', handleReadChat);
+            ioClient.off('remove-message', handleRemoveMessage);
 
             ioClient.disconnect();
         };

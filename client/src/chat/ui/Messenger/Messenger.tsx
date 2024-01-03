@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../../app/model/store.model';
 import { Message } from '../Message/Message';
 import { MessageInput } from '../MessageInput/MessageInput';
+import { useMessenger } from '../../hooks/useMessenger';
 
 export const Messenger = () => {
     const messages = useAppSelector(state => state.messenger.messages);
@@ -25,6 +26,8 @@ export const Messenger = () => {
                 ) : (
                     messages.map(message => (
                         <Message
+                            chatId={message.chatId}
+                            id={message._id}
                             key={message._id}
                             ownerData={message.ownerData}
                             isMine={message.owner === userData?.id}

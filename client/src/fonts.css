@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('./shared/assets/fonts/Ubuntu-Light.ttf');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Jost';
+    src: url('./shared/assets/fonts/Jost-Medium.ttf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Jost';
+    src: url('./shared/assets/fonts/Jost-Regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Jost';
+    src: url('./shared/assets/fonts/Jost-Light.ttf');
+    font-weight: 300;
+}

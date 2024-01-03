@@ -14,7 +14,7 @@ services:
         volumes:
             - mongo-data:/data/db
         networks:
-            - live-chat-net
+            - live-chat-net-dev
         ports:
             - 27016:27017
 
@@ -22,11 +22,11 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.app-server.dev
-        container_name: live-chat_app-server
+        container_name: live-chat_app-server-dev
         working_dir: /home/node/app
         restart: unless-stopped
         networks:
-            - live-chat-net
+            - live-chat-net-dev
         ports:
             - 8005:8002
         volumes:
@@ -40,20 +40,20 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.app-client.dev
-        container_name: live-chat_app-client
+        container_name: live-chat_app-client-dev
         restart: unless-stopped
         networks:
-            - live-chat-net
+            - live-chat-net-dev
         ports:
             - 8001:8001
         volumes:
-            - ./client/src:/home/node/app/src:ro
-            - ./client/node_modules:/home/node/app/node_modules:ro
+            - ./client/src:/home/node/app/src
+            - ./client/node_modules:/home/node/app/node_modules
         depends_on:
             - app-server
 
 networks:
-    live-chat-net:
+    live-chat-net-dev:
         driver: bridge
 
 volumes:

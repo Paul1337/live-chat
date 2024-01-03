@@ -27,6 +27,9 @@ export const messengerSlice = createSlice({
         readAll(state: MessengerSliceScheme, action: PayloadAction<void>) {
             state.messages.forEach(mes => (mes.isRead = true));
         },
+        removeMessage(state: MessengerSliceScheme, action: PayloadAction<string>) {
+            state.messages = state.messages.filter(msg => msg._id !== action.payload);
+        },
     },
 });
 

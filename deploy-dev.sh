@@ -1,2 +1,2 @@
-docker compose down
-docker compose -f compose.dev.yaml up -d
+docker compose -f compose.dev.yaml down
+docker compose -f compose.dev.yaml up -d --build

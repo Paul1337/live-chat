@@ -21,18 +21,15 @@ export const TopPanel = () => {
 
     return (
         <div className='flex justify-around items-center m-2'>
-            <div
-                className={`w-6 h-6 bg-center bg-cover`}
-                style={{ backgroundImage: `url(${searchImg})` }}
-            ></div>
+            <div className={`w-6 h-6 bg-center bg-cover`} style={{ backgroundImage: `url(${searchImg})` }}></div>
             <input
-                className='font-["Ubuntu"] border p-2 rounded-md ml-2'
+                className='border p-2 rounded-md ml-2'
                 placeholder='Chat name..'
                 value={searchText}
                 onChange={handleChange}
             />
             <Button onClick={handleAddChatClick} className='w-9 h-9 p-0 border relative'>
-                <span className='font-["Ubuntu"] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>+</span>
+                <span className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>+</span>
             </Button>
 
             {showAddChat && <AddChatModal onClose={() => setShowAddChat(false)} />}

@@ -25,7 +25,7 @@ export interface MessageResponse {
 }
 
 export interface MessageScheme {
-    _id?: string;
+    _id: string;
 
     text?: string;
     img?: string;
