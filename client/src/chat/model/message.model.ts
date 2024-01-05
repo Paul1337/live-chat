@@ -7,7 +7,7 @@ export interface SendMessageRequest {
 }
 
 export interface MessageResponse {
-    _id?: string;
+    _id: string;
 
     text?: string;
     img?: string;

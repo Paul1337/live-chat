@@ -9,6 +9,7 @@ COPY ./server/static ./static
 RUN mkdir secrets
 
 RUN npm install
+RUN npm install -g cross-env
 
 EXPOSE 8002
-CMD ["node", "./src/main.js"]
+CMD ["cross-env", "MODE=production", "node", "./src/main.js"]
